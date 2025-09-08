@@ -1,45 +1,45 @@
-# Data Architecture
+# Архитектура данных
 
-## Overview
+## Обзор
 
-The frazeologizms project employs a sophisticated data architecture designed to efficiently store, process, and serve Russian phraseological units. The system uses JSON-based storage with semantic categorization and automated quality assurance mechanisms.
+Проект фразеологизмов использует сложную архитектуру данных, разработанную для эффективного хранения, обработки и предоставления русских фразеологических единиц. Система использует хранение на основе JSON с семантической категоризацией и автоматизированными механизмами обеспечения качества.
 
-## Data Model
+## Модель данных
 
-### Primary Data Structure
+### Основная структура данных
 
 #### `table_phrases.json` (377.9KB)
-**Main data file used by the website**
+**Основной файл данных, используемый веб-сайтом**
 
 ```json
 {
   "categories": {
     "category_id": {
-      "name": "Category Display Name",
-      "description": "Category description",
-      "keywords": ["keyword1", "keyword2", ...]
+      "name": "Отображаемое имя категории",
+      "description": "Описание категории",
+      "keywords": ["ключевое слово1", "ключевое слово2", ...]
     }
   },
   "phrases": [
     {
-      "phrase": "Phraseological unit text",
-      "meanings": ["Primary meaning", "Alternative meaning"],
-      "etymology": "Historical origin and context",
+      "phrase": "Текст фразеологической единицы",
+      "meanings": ["Основное значение", "Альтернативное значение"],
+      "etymology": "Историческое происхождение и контекст",
       "category": "semantic_category_id"
     }
   ]
 }
 ```
 
-### Category Schema
+### Схема категорий
 
-#### Semantic Categories (20+ categories)
-Each category contains:
-- **`name`**: Human-readable category name in Russian
-- **`description`**: Explanatory text about the category scope
-- **`keywords`**: Array of keywords for automatic categorization
+#### Семантические категории (20+ категорий)
+Каждая категория содержит:
+- **`name`**: Человекочитаемое имя категории на русском языке
+- **`description`**: Пояснительный текст об области действия категории
+- **`keywords`**: Массив ключевых слов для автоматической категоризации
 
-#### Example Categories:
+#### Примеры категорий:
 ```json
 {
   "emotions_feelings": {
@@ -55,16 +55,16 @@ Each category contains:
 }
 ```
 
-### Phrase Schema
+### Схема фраз
 
-#### Core Phrase Data
-Each phrase entry includes:
-- **`phrase`**: The idiomatic expression (string)
-- **`meanings`**: Array of definitions and explanations
-- **`etymology`**: Historical background and origin story
-- **`category`**: Semantic category identifier
+#### Основные данные фразы
+Каждая запись фразы включает:
+- **`phrase`**: Идиоматическое выражение (строка)
+- **`meanings`**: Массив определений и объяснений
+- **`etymology`**: Исторический фон и происхождение
+- **`category`**: Идентификатор семантической категории
 
-#### Example Phrase Entry:
+#### Пример записи фразы:
 ```json
 {
   "phrase": "золотая молодёжь",
@@ -74,26 +74,26 @@ Each phrase entry includes:
 }
 ```
 
-## Data Flow & Processing Pipeline
+## Поток данных и конвейер обработки
 
-### Processing Stages
+### Этапы обработки
 
 ```mermaid
 flowchart TD
-    A[External Sources] --> B[table_scraper.py]
-    B --> C[Raw Data Extraction]
+    A[Внешние источники] --> B[table_scraper.py]
+    B --> C[Извлечение исходных данных]
     C --> D[categorize_phrases.py]
-    D --> E[Initial Classification]
+    D --> E[Первоначальная классификация]
     E --> F[fix_categorization.py] 
-    F --> G[Manual Corrections]
+    F --> G[Ручные коррекции]
     G --> H[comprehensive_semantic_fix.py]
-    H --> I[Semantic Analysis]
+    H --> I[Семантический анализ]
     I --> J[add_categories_to_table.py]
-    J --> K[Category Integration]
+    J --> K[Интеграция категорий]
     K --> L[restructure_data.py]
-    L --> M[Data Optimization]
+    L --> M[Оптимизация данных]
     M --> N[generate_pages.py]
-    N --> O[Static HTML Generation]
+    N --> O[Генерация статического HTML]
     
     style A fill:#f9f9f9
     style E fill:#e1f5fe
@@ -103,144 +103,144 @@ flowchart TD
     style O fill:#f3e5f5
 ```
 
-### 1. Data Extraction
-**`table_scraper.py`** - External data collection
-- **Sources**: Web scraping from educational resources
-- **Validation**: Data quality checks during extraction
-- **Format**: Structured extraction into JSON format
-- **Deduplication**: Removal of duplicate entries
+### 1. Извлечение данных
+**`table_scraper.py`** - Сбор внешних данных
+- **Источники**: Веб-скрейпинг из образовательных ресурсов
+- **Валидация**: Проверки качества данных во время извлечения
+- **Формат**: Структурированное извлечение в формат JSON
+- **Удаление дубликатов**: Удаление повторяющихся записей
 
-### 2. Initial Categorization  
-**`categorize_phrases.py`** - Keyword-based classification
-- **Method**: Keyword matching against category definitions
-- **Rules**: Pattern-based categorization logic
-- **Output**: Initial category assignments
-- **Coverage**: Automated classification for bulk processing
+### 2. Первоначальная категоризация  
+**`categorize_phrases.py`** - Классификация на основе ключевых слов
+- **Метод**: Сопоставление ключевых слов с определениями категорий
+- **Правила**: Логика категоризации на основе паттернов
+- **Результат**: Начальные назначения категорий
+- **Покрытие**: Автоматическая классификация для массовой обработки
 
-### 3. Manual Corrections
-**`fix_categorization.py`** - Rule-based fixes
-- **Purpose**: Address known categorization errors
-- **Method**: Explicit phrase-to-category mappings
-- **Maintenance**: Hand-curated correction rules
-- **Quality**: High-precision targeted fixes
+### 3. Ручные коррекции
+**`fix_categorization.py`** - Коррекции на основе правил
+- **Назначение**: Исправление известных ошибок категоризации
+- **Метод**: Явные сопоставления фраза-категория
+- **Обслуживание**: Ручное создание правил коррекции
+- **Качество**: Высокоточные целевые исправления
 
-### 4. Semantic Analysis
-**`comprehensive_semantic_fix.py`** - AI-powered validation
-- **Approach**: Semantic meaning analysis of complete expressions
-- **Rules**: 401 corrections applied based on phrase semantics
-- **Validation**: Scores corrections by confidence level
-- **Reporting**: Detailed correction report generation
+### 4. Семантический анализ
+**`comprehensive_semantic_fix.py`** - Валидация на основе ИИ
+- **Подход**: Семантический анализ значений полных выражений
+- **Правила**: 401 исправление применено на основе семантики фраз
+- **Валидация**: Оценка коррекций по уровню уверенности
+- **Отчетность**: Генерация подробного отчета о коррекциях
 
-### 5. Data Integration
-**`add_categories_to_table.py`** - Category metadata integration
-- **Function**: Merge category definitions with phrase data
-- **Consistency**: Ensure referential integrity
-- **Validation**: Verify all phrases have valid categories
+### 5. Интеграция данных
+**`add_categories_to_table.py`** - Интеграция метаданных категорий
+- **Функция**: Объединение определений категорий с данными фраз
+- **Согласованность**: Обеспечение целостности ссылок
+- **Валидация**: Проверка всех фраз на наличие допустимых категорий
 
-### 6. Data Optimization
-**`restructure_data.py`** - Frontend optimization
-- **Purpose**: Optimize data structure for client-side consumption
-- **Performance**: Minimize JSON size and parsing time
-- **Structure**: Organize data for efficient filtering and display
+### 6. Оптимизация данных
+**`restructure_data.py`** - Оптимизация для фронтенда
+- **Назначение**: Оптимизация структуры данных для потребления клиентской стороной
+- **Производительность**: Минимизация размера JSON и времени парсинга
+- **Структура**: Организация данных для эффективной фильтрации и отображения
 
-## Data Versions & Variants
+## Версии и варианты данных
 
-### Multiple Data Files
-**Version control and backup strategy**
+### Множественные файлы данных
+**Стратегия контроля версий и резервного копирования**
 
 #### `table_phrases.json` (377.9KB)
-- **Primary**: Main file used by website
-- **Status**: Current production data
-- **Quality**: Semantically corrected and validated
+- **Основной**: Главный файл, используемый веб-сайтом
+- **Статус**: Текущие производственные данные
+- **Качество**: Семантически исправленные и проверенные
 
 #### `table_phrases_fixed.json` (376.2KB)  
-- **Purpose**: Manual correction rules applied
-- **Stage**: Intermediate processing version
-- **Usage**: Development and testing
+- **Назначение**: Применены правила ручной коррекции
+- **Этап**: Промежуточная версия обработки
+- **Использование**: Разработка и тестирование
 
 #### `table_phrases_semantic_fixed.json` (376.5KB)
-- **Purpose**: Advanced semantic corrections
-- **Features**: AI-powered categorization improvements
-- **Status**: Enhanced quality version
+- **Назначение**: Продвинутые семантические коррекции
+- **Особенности**: Улучшения категоризации на основе ИИ
+- **Статус**: Версия с улучшенным качеством
 
 #### `semantic_corrections_report.json` (281.7KB)
-- **Content**: Detailed correction analysis and statistics
-- **Data**: 401 corrections with confidence scores
-- **Purpose**: Quality assurance and audit trail
+- **Содержание**: Подробный анализ коррекции и статистика
+- **Данные**: 401 коррекция с оценками уверенности
+- **Назначение**: Обеспечение качества и аудиторский след
 
-## Data Quality Assurance
+## Обеспечение качества данных
 
-### Validation Mechanisms
+### Механизмы валидации
 
-#### Semantic Validation
-- **Principle**: Categorization based on complete phrase meaning
-- **Method**: Advanced pattern matching and semantic analysis
-- **Rules**: Avoid keyword-only categorization
-- **Examples**: 
-  - "золотая молодёжь" → `money_wealth` (not `religion_mythology`)
-  - "овчинка выделки не стоит" → `work_labor` (not `animals`)
+#### Семантическая валидация
+- **Принцип**: Категоризация на основе полного значения фразы
+- **Метод**: Расширенное сопоставление паттернов и семантический анализ
+- **Правила**: Избегать категоризацию только по ключевым словам
+- **Примеры**: 
+  - "золотая молодёжь" → `money_wealth` (не `religion_mythology`)
+  - "овчинка выделки не стоит" → `work_labor` (не `animals`)
 
-#### Consistency Checks
-- **Referential Integrity**: All phrases have valid category references
-- **Data Completeness**: Required fields present for all entries
-- **Format Validation**: JSON structure and syntax validation
-- **Encoding**: UTF-8 consistency across all files
+#### Проверки согласованности
+- **Целостность ссылок**: Все фразы имеют допустимые ссылки на категории
+- **Полнота данных**: Наличие обязательных полей для всех записей
+- **Валидация формата**: Валидация структуры и синтаксиса JSON
+- **Кодировка**: Согласованность UTF-8 во всех файлах
 
-#### Quality Metrics
-- **Coverage**: 10,000+ phraseological units
-- **Categories**: 20+ semantic categories
-- **Corrections**: 401 semantic improvements applied
-- **Accuracy**: High-confidence categorization (score ≥ 5)
+#### Метрики качества
+- **Покрытие**: 10 000+ фразеологических единиц
+- **Категории**: 20+ семантических категорий
+- **Коррекции**: 401 семантическое улучшение применено
+- **Точность**: Категоризация с высокой степенью уверенности (оценка ≥ 5)
 
-## Performance Optimization
+## Оптимизация производительности
 
-### Data Structure Optimization
+### Оптимизация структуры данных
 
-#### JSON Efficiency
-- **Minification**: Compact JSON formatting for production
-- **Indexing**: Optimized for category-based filtering
-- **Caching**: Browser-friendly caching structure
-- **Compression**: Gzip-ready for web delivery
+#### Эффективность JSON
+- **Минификация**: Компактное форматирование JSON для производства
+- **Индексация**: Оптимизировано для фильтрации по категориям
+- **Кэширование**: Структура, дружественная к кэшированию браузера
+- **Сжатие**: Готово к gzip для веб-доставки
 
-#### Client-Side Performance
-- **Lazy Loading**: Category-based data loading
-- **Filtering**: Efficient client-side data filtering
-- **Search**: Fast text-based phrase searching
-- **Memory**: Optimized for mobile device constraints
+#### Производительность клиентской стороны
+- **Ленивая загрузка**: Загрузка данных на основе категорий
+- **Фильтрация**: Эффективная фильтрация данных на клиентской стороне
+- **Поиск**: Быстрый текстовый поиск фраз
+- **Память**: Оптимизировано для ограничений мобильных устройств
 
-### Storage Strategy
+### Стратегия хранения
 
-#### File Organization
+#### Организация файлов
 ```
 data/
-├── table_phrases.json           # Production data
-├── table_phrases_fixed.json     # Development version
-├── table_phrases_semantic_fixed.json  # Enhanced version
-└── semantic_corrections_report.json   # Quality report
+├── table_phrases.json           # Производственные данные
+├── table_phrases_fixed.json     # Версия для разработки
+├── table_phrases_semantic_fixed.json  # Улучшенная версия
+└── semantic_corrections_report.json   # Отчет о качестве
 ```
 
-#### Backup Strategy
-- **Version Control**: Git-based change tracking
-- **Multiple Versions**: Parallel data files for rollback
-- **Regular Exports**: Automated backup generation
-- **Quality Reports**: Detailed change documentation
+#### Стратегия резервного копирования
+- **Контроль версий**: Отслеживание изменений на основе Git
+- **Множественные версии**: Параллельные файлы данных для отката
+- **Регулярный экспорт**: Автоматическая генерация резервных копий
+- **Отчеты о качестве**: Подробная документация изменений
 
-## Data Access Patterns
+## Паттерны доступа к данным
 
-### Frontend Data Loading
-**Client-side JSON consumption**
+### Загрузка данных фронтенда
+**Потребление JSON на клиентской стороне**
 
-#### Category Filtering
+#### Фильтрация по категориям
 ```javascript
-// Load category-specific data
+// Загрузка данных определенной категории
 const categoryPhrases = allPhrases.filter(
   phrase => phrase.category === targetCategory
 );
 ```
 
-#### Search Functionality
+#### Функциональность поиска
 ```javascript
-// Text-based phrase search
+// Текстовый поиск фраз
 const searchResults = allPhrases.filter(phrase =>
   phrase.phrase.toLowerCase().includes(searchTerm.toLowerCase()) ||
   phrase.meanings.some(meaning => 
@@ -249,12 +249,12 @@ const searchResults = allPhrases.filter(phrase =>
 );
 ```
 
-### Quiz Data Access
-**Non-repeating phrase selection**
+### Доступ к данным викторины
+**Выбор фраз без повторений**
 
-#### Random Selection
+#### Случайный выбор
 ```javascript
-// Avoid previously used phrases
+// Избегать ранее использованных фраз
 const availablePhrases = allPhrases.filter(
   phrase => !usedPhrases.has(phrase.phrase)
 );
@@ -263,44 +263,44 @@ const randomPhrase = availablePhrases[
 ];
 ```
 
-## Integration Points
+## Точки интеграции
 
-### Component Integration
-**Data flow to frontend components**
+### Интеграция компонентов
+**Поток данных к компонентам фронтенда**
 
-#### Dynamic Loading
-- **Component Loader**: `component-loader.js` manages data context
-- **Category Pages**: Automatic data filtering by category
-- **Quiz System**: Real-time data access for interactive features
-- **Navigation**: Category-based menu generation
+#### Динамическая загрузка
+- **Загрузчик компонентов**: `component-loader.js` управляет контекстом данных
+- **Страницы категорий**: Автоматическая фильтрация данных по категориям
+- **Система викторин**: Доступ к данным в реальном времени для интерактивных функций
+- **Навигация**: Генерация меню на основе категорий
 
-#### API Compatibility
-- **RESTful Structure**: JSON structure suitable for REST API conversion
-- **Future Expansion**: Ready for backend API integration
-- **Caching**: CDN and browser caching strategies
-- **Versioning**: Data version tracking for API compatibility
+#### Совместимость API
+- **Структура RESTful**: Структура JSON, подходящая для преобразования в REST API
+- **Будущее расширение**: Готово для интеграции с бэкенд API
+- **Кэширование**: Стратегии кэширования CDN и браузера
+- **Версионирование**: Отслеживание версий данных для совместимости API
 
-## Data Governance
+## Управление данными
 
-### Quality Standards
-- **Semantic Accuracy**: Meaning-based categorization
-- **Cultural Authenticity**: Proper Russian language usage
-- **Educational Value**: Appropriate for language learning
-- **Completeness**: Comprehensive meaning and etymology data
+### Стандарты качества
+- **Семантическая точность**: Категоризация на основе значений
+- **Культурная аутентичность**: Правильное использование русского языка
+- **Образовательная ценность**: Подходит для изучения языка
+- **Полнота**: Комплексные данные о значении и этимологии
 
-### Maintenance Workflow
-1. **Data Updates**: Add new phrases or modify existing entries
-2. **Quality Processing**: Run categorization and correction scripts
-3. **Validation**: Verify data integrity and semantic accuracy
-4. **Testing**: Local testing with development server
-5. **Deployment**: Update production data files
+### Рабочий процесс обслуживания
+1. **Обновления данных**: Добавление новых фраз или изменение существующих записей
+2. **Качественная обработка**: Запуск скриптов категоризации и коррекции
+3. **Валидация**: Проверка целостности данных и семантической точности
+4. **Тестирование**: Локальное тестирование с сервером разработки
+5. **Развёртывание**: Обновление производственных файлов данных
 
-### Future Enhancements
-- **Database Migration**: PostgreSQL integration for advanced querying
-- **API Development**: RESTful API for external integrations  
-- **Real-time Updates**: Dynamic content management
-- **Advanced Analytics**: Usage tracking and learning analytics
+### Будущие улучшения
+- **Миграция базы данных**: Интеграция с PostgreSQL для продвинутых запросов
+- **Разработка API**: RESTful API для внешних интеграций  
+- **Обновления в реальном времени**: Динамическое управление контентом
+- **Продвинутая аналитика**: Отслеживание использования и аналитика обучения
 
 ---
 
-*This data architecture supports the current static site approach while providing flexibility for future database integration and API development.*
+*Эта архитектура данных поддерживает текущий подход статического сайта, одновременно обеспечивая гибкость для будущей интеграции базы данных и разработки API.*

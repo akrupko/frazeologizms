@@ -1,205 +1,205 @@
-# Frazeologizms Project Wiki
+# Вики проекта Фразеологизмы
 
-## 📚 Complete Documentation Repository
+## 📚 Полный репозиторий документации
 
-Welcome to the comprehensive documentation for the **Frazeologizms** - Russian Phraseological Units Learning Platform. This wiki contains detailed technical documentation, guides, and reference materials for developers, maintainers, and contributors.
+Добро пожаловать в комплексную документацию **Фразеологизмы** - платформы для изучения русских фразеологических единиц. Эта вики содержит подробную техническую документацию, руководства и справочные материалы для разработчиков, сопровождающих и сотрудников.
 
-## 📖 Documentation Index
+## 📖 Индекс документации
 
-### 🏠 Getting Started
-| Document | Description | Audience |
+### 🏠 Начало работы
+| Документ | Описание | Аудитория |
 |----------|-------------|----------|
-| **[Home](Home.md)** | Project overview and quick navigation | Everyone |
-| **[Project Overview](Project-Overview.md)** | Comprehensive project introduction | All stakeholders |
-| **[Development Environment](Development-Environment.md)** | Setup and development workflow | Developers |
+| **[Home](Home.md)** | Обзор проекта и быстрая навигация | Все |
+| **[Обзор проекта](Project-Overview.md)** | Комплексное представление проекта | Все заинтересованные стороны |
+| **[Среда разработки](Development-Environment.md)** | Настройка и рабочий процесс | Разработчики |
 
-### 🏗️ Architecture & Design
-| Document | Description | Technical Level |
+### 🏗️ Архитектура и дизайн
+| Документ | Описание | Технический уровень |
 |----------|-------------|----------------|
-| **[System Architecture](System-Architecture.md)** | Overall system design and components | Advanced |
-| **[Technology Stack](Technology-Stack.md)** | Technologies, dependencies, and tools | Intermediate |
-| **[Frontend Architecture](Frontend-Architecture.md)** | Client-side architecture and components | Advanced |
-| **[Data Architecture](Data-Architecture.md)** | Data model, storage, and processing | Advanced |
+| **[Системная архитектура](System-Architecture.md)** | Общий дизайн системы и компоненты | Продвинутый |
+| **[Технологический стек](Technology-Stack.md)** | Технологии, зависимости и инструменты | Средний |
+| **[Архитектура фронтенда](Frontend-Architecture.md)** | Архитектура клиентской части и компоненты | Продвинутый |
+| **[Архитектура данных](Data-Architecture.md)** | Модель данных, хранение и обработка | Продвинутый |
 
-### 🔧 Core Systems
-| Document | Description | Focus Area |
+### 🔧 Основные системы
+| Документ | Описание | Область фокуса |
 |----------|-------------|------------|
-| **[Quiz Functionality](Quiz-Functionality.md)** | Interactive learning system | Frontend/UX |
-| **[Categorization System](Categorization-System.md)** | Semantic classification engine | Backend/AI |
-| **[Navigation System](Navigation-System.md)** | Site navigation and UX | Frontend |
+| **[Функциональность викторины](Quiz-Functionality.md)** | Интерактивная обучающая система | Фронтенд/UX |
+| **[Система категоризации](Categorization-System.md)** | Движок семантической классификации | Бэкенд/ИИ |
+| **[Система навигации](Navigation-System.md)** | Навигация сайта и UX | Фронтенд |
 
-### 📊 Data & Processing
-| Document | Description | Domain |
+### 📊 Данные и обработка
+| Документ | Описание | Домен |
 |----------|-------------|---------|
-| **[Data Processing Pipeline](Data-Processing-Pipeline.md)** | Automated data workflow | Backend |
-| **[Semantic Correction System](Semantic-Correction-System.md)** | AI-powered categorization | Data Science |
-| **[Static Site Generation](Static-Site-Generation.md)** | Page generation system | Build Process |
+| **[Конвейер обработки данных](Data-Processing-Pipeline.md)** | Автоматизированный рабочий процесс данных | Бэкенд |
+| **[Система семантической коррекции](Semantic-Correction-System.md)** | Категоризация на основе ИИ | Data Science |
+| **[Генерация статических сайтов](Static-Site-Generation.md)** | Система генерации страниц | Процесс сборки |
 
-### 🛠️ Development & Maintenance
-| Document | Description | Role |
+### 🛠️ Разработка и обслуживание
+| Документ | Описание | Роль |
 |----------|-------------|------|
-| **[User Guide](User-Guide.md)** | Platform usage instructions | End Users |
-| **[API Documentation](API-Documentation.md)** | Integration interfaces | Developers |
-| **[Maintenance Guide](Maintenance-Guide.md)** | Updates and management | DevOps |
+| **[Руководство пользователя](User-Guide.md)** | Инструкции по использованию платформы | Конечные пользователи |
+| **[Документация API](API-Documentation.md)** | Интерфейсы интеграции | Разработчики |
+| **[Руководство по обслуживанию](Maintenance-Guide.md)** | Обновления и управление | DevOps |
 
-## 🎯 Quick Access by Role
+## 🎯 Быстрый доступ по ролям
 
-### For Developers
-**Essential Reading:**
-1. [Development Environment](Development-Environment.md) - Setup and workflow
-2. [Frontend Architecture](Frontend-Architecture.md) - Client-side development
-3. [Data Architecture](Data-Architecture.md) - Data handling
-4. [Technology Stack](Technology-Stack.md) - Tools and dependencies
+### Для разработчиков
+**Обязательное чтение:**
+1. [Среда разработки](Development-Environment.md) - Настройка и рабочий процесс
+2. [Архитектура фронтенда](Frontend-Architecture.md) - Разработка клиентской части
+3. [Архитектура данных](Data-Architecture.md) - Обработка данных
+4. [Технологический стек](Technology-Stack.md) - Инструменты и зависимости
 
-**Advanced Topics:**
-- [Quiz Functionality](Quiz-Functionality.md) - Interactive features
-- [Categorization System](Categorization-System.md) - AI classification
-- [API Documentation](API-Documentation.md) - Integration points
+**Продвинутые темы:**
+- [Функциональность викторины](Quiz-Functionality.md) - Интерактивные функции
+- [Система категоризации](Categorization-System.md) - Классификация ИИ
+- [Документация API](API-Documentation.md) - Точки интеграции
 
-### For Project Managers
-**Strategic Overview:**
-1. [Project Overview](Project-Overview.md) - Complete project understanding
-2. [User Guide](User-Guide.md) - User experience perspective
-3. [Maintenance Guide](Maintenance-Guide.md) - Operational requirements
+### Для менеджеров проектов
+**Стратегический обзор:**
+1. [Обзор проекта](Project-Overview.md) - Полное понимание проекта
+2. [Руководство пользователя](User-Guide.md) - Перспектива пользовательского опыта
+3. [Руководство по обслуживанию](Maintenance-Guide.md) - Операционные требования
 
-### For Data Scientists
-**Data-Focused Documentation:**
-1. [Data Architecture](Data-Architecture.md) - Data model and flow
-2. [Semantic Correction System](Semantic-Correction-System.md) - AI categorization
-3. [Categorization System](Categorization-System.md) - Classification logic
-4. [Data Processing Pipeline](Data-Processing-Pipeline.md) - Automation workflow
+### Для дата-сайентистов
+**Документация с фокусом на данных:**
+1. [Архитектура данных](Data-Architecture.md) - Модель данных и поток
+2. [Система семантической коррекции](Semantic-Correction-System.md) - Категоризация ИИ
+3. [Система категоризации](Categorization-System.md) - Логика классификации
+4. [Конвейер обработки данных](Data-Processing-Pipeline.md) - Рабочий процесс автоматизации
 
-### For UI/UX Designers
-**Design-Relevant Docs:**
-1. [Frontend Architecture](Frontend-Architecture.md) - Component system
-2. [Quiz Functionality](Quiz-Functionality.md) - User interaction design
-3. [Navigation System](Navigation-System.md) - Information architecture
-4. [User Guide](User-Guide.md) - User experience flow
+### Для UI/UX дизайнеров
+**Документы, релевантные для дизайна:**
+1. [Архитектура фронтенда](Frontend-Architecture.md) - Система компонентов
+2. [Функциональность викторины](Quiz-Functionality.md) - Дизайн пользовательского взаимодействия
+3. [Система навигации](Navigation-System.md) - Информационная архитектура
+4. [Руководство пользователя](User-Guide.md) - Поток пользовательского опыта
 
-## 🔍 Documentation Features
+## 🔍 Особенности документации
 
-### Cross-Referenced
-- **Internal Links**: Easy navigation between related topics
-- **Code Examples**: Practical implementation references
-- **Diagrams**: Visual architecture representations
-- **API References**: Detailed interface documentation
+### Перекрёстные ссылки
+- **Внутренние ссылки**: Простая навигация между связанными темами
+- **Примеры кода**: Практические ссылки на реализацию
+- **Диаграммы**: Визуальные представления архитектуры
+- **Ссылки на API**: Подробная документация интерфейсов
 
-### Version Controlled
-- **Git Integration**: Documentation versioned with code
-- **Change Tracking**: Historical documentation changes
-- **Collaborative**: Multi-contributor documentation process
-- **Release Notes**: Documentation updates per release
+### Контроль версий
+- **Интеграция с Git**: Документация версионируется вместе с кодом
+- **Отслеживание изменений**: История изменений документации
+- **Совместная работа**: Многопользовательский процесс документирования
+- **Примечания к релизам**: Обновления документации по релизам
 
-### Searchable
-- **Indexed Content**: Full-text search capability
-- **Tagged Sections**: Topic-based navigation
-- **Cross-References**: Related content discovery
-- **Glossary**: Technical term definitions
+### Поиск
+- **Индексированный контент**: Возможность полнотекстового поиска
+- **Тегированные секции**: Навигация по темам
+- **Перекрёстные ссылки**: Обнаружение связанного контента
+- **Глоссарий**: Определения технических терминов
 
-## 📈 Project Statistics
+## 📈 Статистика проекта
 
-### Documentation Coverage
-- **Total Pages**: 12+ comprehensive documents
-- **Code Examples**: 50+ practical code snippets
-- **Architecture Diagrams**: 10+ visual representations
-- **API References**: Complete interface documentation
+### Покрытие документацией
+- **Всего страниц**: 12+ комплексных документов
+- **Примеры кода**: 50+ практических сниппетов
+- **Архитектурные диаграммы**: 10+ визуальных представлений
+- **Ссылки на API**: Полная документация интерфейсов
 
-### Technical Depth
-- **Beginner Friendly**: Setup and user guides
-- **Intermediate Level**: Development workflows
-- **Advanced Topics**: Architecture and optimization
-- **Expert Content**: AI/ML categorization systems
+### Техническая глубина
+- **Для новичков**: Руководства по настройке и использованию
+- **Средний уровень**: Рабочие процессы разработки
+- **Продвинутые темы**: Архитектура и оптимизация
+- **Экспертный контент**: Системы ИИ/ML категоризации
 
-## 🤝 Contributing to Documentation
+## 🤝 Вклад в документацию
 
-### Documentation Standards
-- **Markdown Format**: Consistent formatting using GitHub Markdown
-- **Clear Structure**: Hierarchical organization with headers
-- **Code Examples**: Working code snippets with explanations
-- **Visual Aids**: Diagrams and screenshots where helpful
+### Стандарты документации
+- **Формат Markdown**: Последовательное форматирование с использованием GitHub Markdown
+- **Чёткая структура**: Иерархическая организация с заголовками
+- **Примеры кода**: Рабочие сниппеты с пояснениями
+- **Визуальные материалы**: Диаграммы и скриншоты при необходимости
 
-### Update Process
-1. **Edit Documentation**: Modify relevant .md files
-2. **Test Examples**: Verify all code examples work
-3. **Review Changes**: Internal review for accuracy
-4. **Update Index**: Modify this README if needed
-5. **Commit Changes**: Git commit with descriptive message
+### Процесс обновления
+1. **Редактирование документации**: Изменение соответствующих .md файлов
+2. **Тестирование примеров**: Проверка работоспособности всех примеров кода
+3. **Проверка изменений**: Внутренний контроль точности
+4. **Обновление индекса**: Изменение этого README при необходимости
+5. **Коммит изменений**: Git коммит с описательным сообщением
 
-### Writing Guidelines
-- **Clear Language**: Accessible to target audience
-- **Practical Examples**: Real-world code and scenarios
-- **Current Information**: Keep documentation up-to-date
-- **Cross-References**: Link to related documentation
+### Руководящие принципы написания
+- **Чёткий язык**: Доступный целевой аудитории
+- **Практические примеры**: Реальные сценарии кода
+- **Актуальная информация**: Поддержание документации в актуальном состоянии
+- **Перекрёстные ссылки**: Связывание с связанной документацией
 
-## 🔧 Documentation Tools
+## 🔧 Инструменты документации
 
-### Required Tools
-- **Markdown Editor**: VS Code, Typora, or similar
-- **Git**: Version control for documentation changes
-- **Browser**: For viewing rendered documentation
-- **Image Editor**: For creating diagrams and screenshots
+### Необходимые инструменты
+- **Редактор Markdown**: VS Code, Typora или аналогичный
+- **Git**: Контроль версий для изменений документации
+- **Браузер**: Для просмотра отрендеренной документации
+- **Редактор изображений**: Для создания диаграмм и скриншотов
 
-### Recommended Extensions
-- **Markdown Preview**: Real-time rendering
-- **Mermaid Support**: Diagram creation
-- **Link Checker**: Verify internal links
-- **Spell Checker**: Documentation quality
+### Рекомендуемые расширения
+- **Предпросмотр Markdown**: Рендеринг в реальном времени
+- **Поддержка Mermaid**: Создание диаграмм
+- **Проверка ссылок**: Проверка внутренних ссылок
+- **Проверка орфографии**: Качество документации
 
-## 📋 Documentation Roadmap
+## 📋 Дорожная карта документации
 
-### Planned Additions
-- [ ] **Performance Guide**: Optimization strategies
-- [ ] **Security Documentation**: Security best practices
-- [ ] **Deployment Guide**: Production deployment
-- [ ] **Testing Framework**: Automated testing setup
-- [ ] **Monitoring Setup**: Application monitoring
-- [ ] **Backup Procedures**: Data backup strategies
+### Планируемые дополнения
+- [ ] **Руководство по производительности**: Стратегии оптимизации
+- [ ] **Документация по безопасности**: Рекомендации по безопасности
+- [ ] **Руководство по развёртыванию**: Развёртывание в продакшене
+- [ ] **Фреймворк тестирования**: Настройка автоматического тестирования
+- [ ] **Настройка мониторинга**: Мониторинг приложений
+- [ ] **Процедуры резервного копирования**: Стратегии резервного копирования данных
 
-### Continuous Improvements
-- [ ] **Code Example Updates**: Keep examples current
-- [ ] **Screenshot Refresh**: Update UI screenshots
-- [ ] **Link Validation**: Regular link checking
-- [ ] **User Feedback**: Incorporate user suggestions
-- [ ] **Performance Metrics**: Documentation usage analytics
+### Постоянные улучшения
+- [ ] **Обновления примеров кода**: Поддержание актуальности примеров
+- [ ] **Обновление скриншотов**: Обновление скриншотов UI
+- [ ] **Проверка ссылок**: Регулярная проверка ссылок
+- [ ] **Обратная связь пользователей**: Внедрение предложений пользователей
+- [ ] **Метрики производительности**: Аналитика использования документации
 
-## 🎓 Learning Path
+## 🎓 Путь обучения
 
-### Beginner Path
-1. **Start Here**: [Home](Home.md) → [Project Overview](Project-Overview.md)
-2. **Setup**: [Development Environment](Development-Environment.md)
-3. **Usage**: [User Guide](User-Guide.md)
-4. **Basic Concepts**: [Technology Stack](Technology-Stack.md)
+### Путь для новичков
+1. **Начните здесь**: [Home](Home.md) → [Обзор проекта](Project-Overview.md)
+2. **Настройка**: [Среда разработки](Development-Environment.md)
+3. **Использование**: [Руководство пользователя](User-Guide.md)
+4. **Базовые концепции**: [Технологический стек](Technology-Stack.md)
 
-### Intermediate Path
-1. **Architecture**: [Frontend Architecture](Frontend-Architecture.md)
-2. **Data Handling**: [Data Architecture](Data-Architecture.md)
-3. **Core Features**: [Quiz Functionality](Quiz-Functionality.md)
-4. **Maintenance**: [Maintenance Guide](Maintenance-Guide.md)
+### Промежуточный путь
+1. **Архитектура**: [Архитектура фронтенда](Frontend-Architecture.md)
+2. **Обработка данных**: [Архитектура данных](Data-Architecture.md)
+3. **Основные функции**: [Функциональность викторины](Quiz-Functionality.md)
+4. **Обслуживание**: [Руководство по обслуживанию](Maintenance-Guide.md)
 
-### Advanced Path
-1. **System Design**: [System Architecture](System-Architecture.md)
-2. **AI Systems**: [Categorization System](Categorization-System.md)
-3. **Processing**: [Data Processing Pipeline](Data-Processing-Pipeline.md)
-4. **Integration**: [API Documentation](API-Documentation.md)
+### Продвинутый путь
+1. **Дизайн системы**: [Системная архитектура](System-Architecture.md)
+2. **Системы ИИ**: [Система категоризации](Categorization-System.md)
+3. **Обработка**: [Конвейер обработки данных](Data-Processing-Pipeline.md)
+4. **Интеграция**: [Документация API](API-Documentation.md)
 
-## 📞 Support & Questions
+## 📞 Поддержка и вопросы
 
-### Documentation Issues
-- **Unclear Content**: Report unclear or confusing sections
-- **Missing Information**: Request additional documentation
-- **Errors Found**: Report factual errors or broken links
-- **Suggestions**: Propose improvements or additions
+### Проблемы с документацией
+- **Непонятный контент**: Сообщить о непонятных или запутанных разделах
+- **Отсутствующая информация**: Запросить дополнительную документацию
+- **Найденные ошибки**: Сообщить о фактических ошибках или неработающих ссылках
+- **Предложения**: Предложить улучшения или дополнения
 
-### Getting Help
-- **GitHub Issues**: Create issue for documentation problems
-- **Code Examples**: Request specific implementation examples
-- **Architecture Questions**: Ask about system design decisions
-- **Best Practices**: Inquire about recommended approaches
+### Получение помощи
+- **GitHub Issues**: Создать issue для проблем с документацией
+- **Примеры кода**: Запросить конкретные примеры реализации
+- **Вопросы по архитектуре**: Спросить о решениях системного дизайна
+- **Рекомендации**: Узнать о рекомендуемых подходах
 
 ---
 
-**Last Updated**: December 2024  
-**Documentation Version**: 1.0  
-**Project Version**: Current Release
+**Последнее обновление**: Декабрь 2024  
+**Версия документации**: 1.0  
+**Версия проекта**: Текущий релиз
 
-*This wiki provides comprehensive documentation for the frazeologizms project. For the latest updates, always refer to the repository's main branch.*
+*Эта вики предоставляет комплексную документацию для проекта фразеологизмы. Для получения последних обновлений всегда обращайтесь к основной ветке репозитория.*

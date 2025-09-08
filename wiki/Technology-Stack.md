@@ -1,34 +1,34 @@
-# Technology Stack & Dependencies
+# Технологический стек и зависимости
 
-## Overview
+## Обзор
 
-The frazeologizms project employs a modern, lightweight technology stack designed for educational content delivery and maintenance efficiency. The architecture emphasizes static site generation for performance while providing dynamic interactive features through client-side JavaScript.
+Проект фразеологизмы использует современный, лёгкий технологический стек, разработанный для доставки образовательного контента и эффективности обслуживания. Архитектура делает акцент на генерации статических сайтов для производительности, одновременно предоставляя динамические интерактивные функции через клиентский JavaScript.
 
-## Core Technologies
+## Основные технологии
 
-### Backend Technologies
+### Бэкенд технологии
 
 #### Python 3.9+
-**Primary backend language for data processing and site generation**
+**Основной бэкенд язык для обработки данных и генерации сайта**
 
-- **Version Requirement**: Python >= 3.9
-- **Usage**: Data processing pipeline, categorization engine, static site generation
-- **Key Features**: Type hints, f-strings, dataclasses for robust data handling
+- **Требования к версии**: Python >= 3.9
+- **Использование**: Конвейер обработки данных, движок категоризации, генерация статических сайтов
+- **Ключевые особенности**: Подсказки типов, f-строки, классы данных для надёжной обработки данных
 
 #### Flask 3.1.2
-**Development web server and templating**
+**Веб-сервер разработки и шаблонизатор**
 
-- **Purpose**: Local development server via `start_server.py`
-- **Features**: Lightweight WSGI application framework
-- **Usage**: Development testing, not production deployment
-- **Companion**: Werkzeug 3.1.3 (WSGI toolkit)
+- **Назначение**: Локальный сервер разработки через `start_server.py`
+- **Особенности**: Лёгкий WSGI-фреймворк приложений
+- **Использование**: Тестирование в разработке, не для продакшена
+- **Спутник**: Werkzeug 3.1.3 (WSGI тулкит)
 
 #### Jinja2 3.1.4
-**Template engine for HTML generation**
+**Движок шаблонов для генерации HTML**
 
-- **Integration**: Built into Flask for template rendering
-- **Usage**: Dynamic HTML generation in `generate_pages.py`
-- **Features**: Template inheritance, macros, filters
+- **Интеграция**: Встроен в Flask для отображения шаблонов
+- **Использование**: Динамическая генерация HTML в `generate_pages.py`
+- **Особенности**: Наследование шаблонов, макросы, фильтры
 
 ### Data Processing Libraries
 

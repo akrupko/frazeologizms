@@ -1,22 +1,22 @@
-# Frazeologizms - Russian Phraseological Units Learning Platform
+# Фразеологизмы - Платформа для изучения русских фразеологических единиц
 
-Welcome to the **Frazeologizms** project wiki! This is an interactive learning platform dedicated to Russian phraseological units (idioms, expressions, and proverbs).
+Добро пожаловать в вики проекта **Фразеологизмы**! Это интерактивная обучающая платформа, посвящённая русским фразеологическим единицам (идиомам, выражениям и пословицам).
 
-## 📚 What is Frazeologizms?
+## 📚 Что такое Фразеологизмы?
 
-The **frazeologizms** project is a comprehensive educational platform that provides:
-- **Interactive Learning**: Explore Russian idioms with definitions, meanings, and etymologies
-- **Semantic Categorization**: Phrases organized into meaningful thematic groups
-- **Quiz System**: Test your knowledge with interactive exercises
-- **Exam Preparation**: Targeted practice for Russian language exams (EGE/OGÉ)
-- **Cultural Insights**: Understand Russian culture through idiomatic expressions
+Проект **фразеологизмы** — это комплексная образовательная платформа, которая предоставляет:
+- **Интерактивное обучение**: Изучайте русские идиомы с определениями, значениями и этимологией
+- **Семантическая категоризация**: Фразы, организованные в осмысленные тематические группы
+- **Система викторин**: Проверьте свои знания с помощью интерактивных упражнений
+- **Подготовка к экзаменам**: Целенаправленная практика для экзаменов по русскому языку (ЕГЭ/ОГЭ)
+- **Культурные знания**: Понимание русской культуры через идиоматические выражения
 
-## 🏗️ Architecture Overview
+## 🏗️ Обзор архитектуры
 
-The platform uses a hybrid architecture combining:
-- **Frontend**: Static website with dynamic JavaScript components
-- **Backend**: Python-based data processing pipeline
-- **Data Layer**: JSON-based storage with semantic categorization
+Платформа использует гибридную архитектуру, сочетающую:
+- **Фронтенд**: Статический веб-сайт с динамическими JavaScript-компонентами
+- **Бэкенд**: Конвейер обработки данных на основе Python
+- **Слой данных**: Хранение на основе JSON с семантической категоризацией
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
@@ -28,95 +28,95 @@ The platform uses a hybrid architecture combining:
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-## 🚀 Quick Start
+## 🚀 Быстрый старт
 
-1. **Clone the repository**
-2. **Install dependencies**: `pip install -r requirements.txt`
-3. **Run data processing**: Execute Python scripts in sequence
-4. **Generate pages**: `python generate_pages.py`
-5. **Start local server**: `python start_server.py`
-6. **Open browser**: Navigate to `http://localhost:5000`
+1. **Клонируйте репозиторий**
+2. **Установите зависимости**: `pip install -r requirements.txt`
+3. **Запустите обработку данных**: Выполните Python-скрипты последовательно
+4. **Сгенерируйте страницы**: `python generate_pages.py`
+5. **Запустите локальный сервер**: `python start_server.py`
+6. **Откройте браузер**: Перейдите на `http://localhost:5000`
 
-## 📖 Documentation Structure
+## 📖 Структура документации
 
-### Core Documentation
-- **[Project Overview](Project-Overview.md)** - Detailed project information
-- **[Technology Stack](Technology-Stack.md)** - Dependencies and tools
-- **[System Architecture](System-Architecture.md)** - Technical architecture details
+### Основная документация
+- **[Обзор проекта](Project-Overview.md)** - Подробная информация о проекте
+- **[Технологический стек](Technology-Stack.md)** - Зависимости и инструменты
+- **[Системная архитектура](System-Architecture.md)** - Детали технической архитектуры
 
-### Data & Processing
-- **[Data Architecture](Data-Architecture.md)** - Data model and structure
-- **[Categorization System](Categorization-System.md)** - Semantic classification engine
-- **[Data Processing Pipeline](Data-Processing-Pipeline.md)** - Automated processing workflow
+### Данные и обработка
+- **[Архитектура данных](Data-Architecture.md)** - Модель данных и структура
+- **[Система категоризации](Categorization-System.md)** - Движок семантической классификации
+- **[Конвейер обработки данных](Data-Processing-Pipeline.md)** - Автоматизированный рабочий процесс
 
-### Frontend Development
-- **[Frontend Architecture](Frontend-Architecture.md)** - Component-based design
-- **[Quiz Functionality](Quiz-Functionality.md)** - Interactive learning system
-- **[Navigation System](Navigation-System.md)** - Site navigation and components
+### Фронтенд разработка
+- **[Архитектура фронтенда](Frontend-Architecture.md)** - Компонентный дизайн
+- **[Функциональность викторины](Quiz-Functionality.md)** - Интерактивная система обучения
+- **[Система навигации](Navigation-System.md)** - Навигация сайта и компоненты
 
-### Backend Systems
-- **[Backend Processing](Backend-Processing.md)** - Python processing scripts
-- **[Semantic Correction System](Semantic-Correction-System.md)** - Advanced categorization
-- **[Static Site Generation](Static-Site-Generation.md)** - Page generation system
+### Бэкенд системы
+- **[Обработка бэкенда](Backend-Processing.md)** - Python-скрипты обработки
+- **[Система семантической коррекции](Semantic-Correction-System.md)** - Продвинутая категоризация
+- **[Генерация статических сайтов](Static-Site-Generation.md)** - Система генерации страниц
 
-### Development & Maintenance
-- **[Development Environment](Development-Environment.md)** - Setup and workflow
-- **[User Guide](User-Guide.md)** - Platform usage instructions
-- **[API Documentation](API-Documentation.md)** - Integration interfaces
-- **[Maintenance Guide](Maintenance-Guide.md)** - Updates and management
+### Разработка и обслуживание
+- **[Среда разработки](Development-Environment.md)** - Настройка и рабочий процесс
+- **[Руководство пользователя](User-Guide.md)** - Инструкции по использованию платформы
+- **[Документация API](API-Documentation.md)** - Интерфейсы интеграции
+- **[Руководство по обслуживанию](Maintenance-Guide.md)** - Обновления и управление
 
-## 🎯 Key Features
+## 🎯 Ключевые особенности
 
-### 📊 Interactive Quiz System
-- Non-repeating question selection
-- Immediate feedback with explanations
-- Progress tracking and statistics
-- Etymology display for learning context
+### 📊 Интерактивная система викторин
+- Неповторяющийся выбор вопросов
+- Немедленная обратная связь с объяснениями
+- Отслеживание прогресса и статистика
+- Отображение этимологии для контекста обучения
 
-### 🏷️ Semantic Categorization
-- **20+ thematic categories**: Animals, emotions, work, time, etc.
-- **Advanced classification**: Based on complete phrase meanings
-- **Automatic correction**: AI-powered semantic validation
-- **Flexible organization**: Easy browsing and discovery
+### 🏷️ Семантическая категоризация
+- **20+ тематических категорий**: Животные, эмоции, работа, время и т.д.
+- **Продвинутая классификация**: Основана на полных значениях фраз
+- **Автоматическая коррекция**: Семантическая валидация на основе ИИ
+- **Гибкая организация**: Простой просмотр и поиск
 
-### 🛠️ Automated Processing
-- **Data extraction**: Web scraping from external sources
-- **Quality validation**: Automated error detection and correction
-- **Page generation**: Static HTML creation for all categories
-- **SEO optimization**: Search engine friendly structure
+### 🛠️ Автоматизированная обработка
+- **Извлечение данных**: Веб-скрейпинг из внешних источников
+- **Валидация качества**: Автоматическое обнаружение и исправление ошибок
+- **Генерация страниц**: Создание статического HTML для всех категорий
+- **SEO-оптимизация**: Структура, дружественная к поисковым системам
 
-## 👥 Target Users
+## 👥 Целевые пользователи
 
-- **Language Learners**: Students studying Russian idioms
-- **Exam Candidates**: EGE/OGÉ preparation
-- **Linguists**: Researchers studying phraseology
-- **Educators**: Teachers of Russian language and culture
+- **Изучающие язык**: Студенты, изучающие русские идиомы
+- **Кандидаты на экзамены**: Подготовка к ЕГЭ/ОГЭ
+- **Лингвисты**: Исследователи, изучающие фразеологию
+- **Преподаватели**: Учителя русского языка и культуры
 
-## 🔧 Technology Stack
+## 🔧 Технологический стек
 
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Backend**: Python 3.9+
-- **Data**: JSON-based storage
-- **Processing**: pandas, BeautifulSoup, regex
-- **Server**: Flask (development)
-- **Build**: Static site generation
+- **Фронтенд**: HTML5, CSS3, Vanilla JavaScript
+- **Бэкенд**: Python 3.9+
+- **Данные**: Хранение на основе JSON
+- **Обработка**: pandas, BeautifulSoup, regex
+- **Сервер**: Flask (разработка)
+- **Сборка**: Генерация статических сайтов
 
-## 📈 Project Statistics
+## 📈 Статистика проекта
 
-- **10,000+** Russian phraseological units
-- **20+** semantic categories
-- **401** categorization corrections applied
-- **100%** automated processing pipeline
-- **SEO-optimized** static pages
+- **10 000+** русских фразеологических единиц
+- **20+** семантических категорий
+- **401** исправление категоризации применено
+- **100%** автоматизированный конвейер обработки
+- **SEO-оптимизированные** статические страницы
 
-## 🤝 Contributing
+## 🤝 Вклад в проект
 
-See our [Development Environment](Development-Environment.md) guide for setup instructions and [Maintenance Guide](Maintenance-Guide.md) for contribution guidelines.
+Смотрите наше руководство по [Среде разработки](Development-Environment.md) для инструкций по настройке и [Руководство по обслуживанию](Maintenance-Guide.md) для рекомендаций по внесению вклада.
 
-## 📄 License
+## 📄 Лицензия
 
-This project is designed for educational purposes and Russian language learning.
+Этот проект предназначен для образовательных целей и изучения русского языка.
 
 ---
 
-*Last updated: December 2024*
+*Последнее обновление: Декабрь 2024*

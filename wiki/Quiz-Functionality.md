@@ -1,55 +1,55 @@
-# Quiz Functionality
+# Функциональность викторины
 
-## Overview
+## Обзор
 
-The quiz system is the core interactive component of the frazeologizms platform, providing an engaging way for users to learn and test their knowledge of Russian phraseological units. Built around the `PhraseologyTrainer` class, it offers category-based learning, progress tracking, and immediate feedback.
+Система викторины является основным интерактивным компонентом платформы фразеологизмов, предоставляющим увлекательный способ для пользователей изучать и тестировать свои знания русских фразеологических единиц. Построенная вокруг класса `PhraseologyTrainer`, она предлагает обучение на основе категорий, отслеживание прогресса и немедленную обратную связь.
 
-## Core Architecture
+## Основная архитектура
 
-### PhraseologyTrainer Class
-**Main quiz engine in `script.js`**
+### Класс PhraseologyTrainer
+**Основной движок викторины в `script.js`**
 
 ```javascript
 class PhraseologyTrainer {
   constructor() {
-    this.phrases = [];           // Category-filtered phrases
-    this.allPhrases = [];        // Complete phrase dataset
-    this.currentQuestion = null; // Current quiz question
-    this.correctAnswers = 0;     // Score tracking
-    this.totalQuestions = 0;     // Question counter
-    this.usedPhrases = new Set(); // Non-repeating selection
+    this.phrases = [];           // Фразы, отфильтрованные по категориям
+    this.allPhrases = [];        // Полный набор данных фраз
+    this.currentQuestion = null; // Текущий вопрос викторины
+    this.correctAnswers = 0;     // Отслеживание счёта
+    this.totalQuestions = 0;     // Счётчик вопросов
+    this.usedPhrases = new Set(); // Выбор без повторений
   }
 }
 ```
 
-### Quiz Lifecycle
+### Жизненный цикл викторины
 
 ```mermaid
 flowchart TD
-    A[Page Load] --> B[Initialize Quiz]
-    B --> C[Load Phrases Data]
-    C --> D[Filter by Category]
-    D --> E[Setup Event Listeners]
-    E --> F[Start New Question]
+    A[Загрузка страницы] --> B[Инициализация викторины]
+    B --> C[Загрузка данных фраз]
+    C --> D[Фильтрация по категориям]
+    D --> E[Настройка обработчиков событий]
+    E --> F[Начало нового вопроса]
     
-    F --> G[Select Random Phrase]
-    G --> H[Generate Answer Options]
-    H --> I[Display Question]
-    I --> J[Wait for User Input]
+    F --> G[Выбор случайной фразы]
+    G --> H[Генерация вариантов ответов]
+    H --> I[Отображение вопроса]
+    I --> J[Ожидание ввода пользователя]
     
-    J --> K{Answer Selected?}
-    K -->|Yes| L[Validate Answer]
-    K -->|No| J
+    J --> K{Выбран ответ?}
+    K -->|Да| L[Проверка ответа]
+    K -->|Нет| J
     
-    L --> M{Correct?}
-    M -->|Yes| N[Show Success Feedback]
-    M -->|No| O[Show Error Feedback]
+    L --> M{Правильно?}
+    M -->|Да| N[Показать успешную обратную связь]
+    M -->|Нет| O[Показать ошибочную обратную связь]
     
-    N --> P[Update Statistics]
+    N --> P[Обновить статистику]
     O --> P
-    P --> Q{More Questions?}
-    Q -->|Yes| F
-    Q -->|No| R[Show Completion]
+    P --> Q{Ещё вопросы?}
+    Q -->|Да| F
+    Q -->|Нет| R[Показать завершение]
     
     style A fill:#f9f9f9
     style F fill:#e1f5fe
@@ -57,21 +57,21 @@ flowchart TD
     style R fill:#e8f5e8
 ```
 
-## Data Management
+## Управление данными
 
-### Phrase Loading and Filtering
+### Загрузка и фильтрация фраз
 
-#### Data Source Integration
+#### Интеграция источника данных
 ```javascript
 async loadPhrases() {
   try {
     const response = await fetch('table_phrases.json');
     const data = await response.json();
     
-    // Get category from URL or global variable
+    // Получить категорию из URL или глобальной переменной
     const currentCategory = window.CURRENT_CATEGORY || this.getCategoryFromURL();
     
-    // Filter phrases by category
+    // Фильтровать фразы по категориям
     const allValidPhrases = data.phrases.filter(phrase => {
       return phrase.meanings && 
              phrase.meanings.length > 0 && 
@@ -94,43 +94,43 @@ async loadPhrases() {
 }
 ```
 
-#### Category Detection
+#### Обнаружение категории
 ```javascript
 getCategoryFromURL() {
   const path = window.location.pathname;
   const filename = path.split('/').pop() || 'index.html';
   
-  // Map filenames to categories
+  // Сопоставление имён файлов с категориями
   const urlCategoryMap = {
     'frazeologizmy_animals.html': 'animals',
     'frazeologizmy_emotions.html': 'emotions_feelings',
     'frazeologizmy_work.html': 'work_labor',
-    // ... additional mappings
+    // ... дополнительные сопоставления
   };
   
   return urlCategoryMap[filename] || 'general';
 }
 ```
 
-## Question Generation
+## Генерация вопросов
 
-### Non-Repeating Selection Algorithm
+### Алгоритм выбора без повторений
 
-#### Smart Phrase Selection
+#### Интеллектуальный выбор фраз
 ```javascript
 startNewQuestion() {
-  // Check completion condition
+  // Проверить условие завершения
   if (this.usedPhrases.size >= this.phrases.length) {
     this.showGameComplete();
     return;
   }
   
-  // Filter unused phrases
+  // Фильтровать неиспользованные фразы
   const availablePhrases = this.phrases.filter(phrase => 
     !this.usedPhrases.has(phrase.phrase)
   );
   
-  // Random selection
+  // Случайный выбор
   const randomIndex = Math.floor(Math.random() * availablePhrases.length);
   const selectedPhrase = availablePhrases[randomIndex];
   
@@ -142,15 +142,15 @@ startNewQuestion() {
 }
 ```
 
-### Answer Option Generation
+### Генерация вариантов ответов
 
-#### Multiple Choice Creation
+#### Создание множественного выбора
 ```javascript
 generateAnswerOptions() {
   const correctMeaning = this.getRandomMeaning(this.currentQuestion);
   const incorrectMeanings = this.getRandomIncorrectMeanings(correctMeaning, 2);
   
-  // Combine and shuffle options
+  // Объединить и перемешать варианты
   const allOptions = [correctMeaning, ...incorrectMeanings];
   const shuffledOptions = this.shuffleArray(allOptions);
   
@@ -175,7 +175,7 @@ getRandomIncorrectMeanings(correctMeaning, count) {
     }
   }
   
-  // Fallback generic meanings if needed
+  // Резервные общие значения при необходимости
   while (incorrectMeanings.length < count) {
     const genericMeanings = [
       "выражение радости или удовлетворения",
@@ -198,20 +198,20 @@ getRandomIncorrectMeanings(correctMeaning, count) {
 }
 ```
 
-## User Interface
+## Пользовательский интерфейс
 
-### Question Display
+### Отображение вопросов
 
-#### Dynamic Content Rendering
+#### Динамическое отображение контента
 ```javascript
 displayQuestion() {
   const phraseElement = document.getElementById('phrase');
   phraseElement.textContent = this.currentQuestion.phrase;
   
-  // Update progress
+  // Обновить прогресс
   this.updateProgress();
   
-  // Reset UI state
+  // Сбросить состояние интерфейса
   this.resetUIState();
 }
 
@@ -222,14 +222,14 @@ updateProgress() {
   currentElement.textContent = this.usedPhrases.size;
   totalElement.textContent = this.phrases.length;
   
-  // Update progress bar
+  // Обновить индикатор прогресса
   const progressBar = document.getElementById('progress-fill');
   const percentage = (this.usedPhrases.size / this.phrases.length) * 100;
   progressBar.style.width = `${percentage}%`;
 }
 ```
 
-#### Answer Option Interface
+#### Интерфейс вариантов ответов
 ```javascript
 displayAnswerOptions(options, correctMeaning) {
   const container = document.getElementById('answer-options');
@@ -248,26 +248,26 @@ displayAnswerOptions(options, correctMeaning) {
 }
 ```
 
-### Feedback System
+### Система обратной связи
 
-#### Immediate Response Handling
+#### Обработка немедленного ответа
 ```javascript
 handleAnswerSelection(selectedAnswer, correctAnswer, buttonElement) {
   const isCorrect = selectedAnswer === correctAnswer;
   
-  // Update statistics
+  // Обновить статистику
   this.totalQuestions++;
   if (isCorrect) {
     this.correctAnswers++;
   }
   
-  // Visual feedback
+  // Визуальная обратная связь
   this.showAnswerFeedback(isCorrect, buttonElement, correctAnswer);
   
-  // Disable further selections
+  // Отключить дальнейшие выборы
   this.disableAnswerOptions();
   
-  // Show controls
+  // Показать элементы управления
   this.showQuizControls();
 }
 
@@ -298,22 +298,22 @@ showAnswerFeedback(isCorrect, buttonElement, correctAnswer) {
 }
 ```
 
-## Progress Tracking
+## Отслеживание прогресса
 
-### Statistics Management
+### Управление статистикой
 
-#### Real-time Progress Updates
+#### Обновления статистики в реальном времени
 ```javascript
 updateStatistics() {
   const accuracy = this.totalQuestions > 0 ? 
     Math.round((this.correctAnswers / this.totalQuestions) * 100) : 0;
   
-  // Update progress display
+  // Обновить отображение прогресса
   document.getElementById('correct-count').textContent = this.correctAnswers;
   document.getElementById('total-count').textContent = this.totalQuestions;
   document.getElementById('accuracy').textContent = `${accuracy}%`;
   
-  // Update progress bar color based on performance
+  // Обновить цвет индикатора прогресса на основе производительности
   const progressBar = document.getElementById('progress-fill');
   if (accuracy >= 80) {
     progressBar.className = 'progress-fill excellent';
@@ -325,9 +325,9 @@ updateStatistics() {
 }
 ```
 
-### Completion Detection
+### Обнаружение завершения
 
-#### Game End Handling
+#### Обработка окончания игры
 ```javascript
 showGameComplete() {
   const accuracy = Math.round((this.correctAnswers / this.totalQuestions) * 100);
@@ -357,7 +357,7 @@ showGameComplete() {
     </div>
   `;
   
-  // Setup restart functionality
+  // Настройка функциональности перезапуска
   document.getElementById('restart-quiz').addEventListener('click', () => {
     this.restart();
   });
@@ -372,11 +372,11 @@ getCompletionMessage(accuracy) {
 }
 ```
 
-## Educational Features
+## Образовательные функции
 
-### Etymology Display
+### Отображение этимологии
 
-#### Contextual Learning
+#### Контекстуальное обучение
 ```javascript
 toggleEtymology() {
   const etymologyDiv = document.getElementById('etymology-info');
@@ -401,24 +401,24 @@ toggleEtymology() {
 }
 ```
 
-### Adaptive Difficulty
+### Адаптивная сложность
 
-#### Smart Question Selection
+#### Интеллектуальный выбор вопросов
 ```javascript
 getRandomMeaning(phrase) {
   if (!phrase.meanings || phrase.meanings.length === 0) {
     return "Значение недоступно";
   }
   
-  // Prefer primary meaning, but allow variety
+  // Предпочитать основное значение, но разрешать разнообразие
   if (phrase.meanings.length === 1) {
     return phrase.meanings[0];
   }
   
-  // Weighted selection favoring primary meaning
+  // Взвешенный выбор в пользу основного значения
   const randomChoice = Math.random();
   if (randomChoice < 0.7) {
-    return phrase.meanings[0]; // Primary meaning (70% chance)
+    return phrase.meanings[0]; // Основное значение (70% шанс)
   } else {
     const alternativeIndex = Math.floor(Math.random() * (phrase.meanings.length - 1)) + 1;
     return phrase.meanings[alternativeIndex];
@@ -426,14 +426,14 @@ getRandomMeaning(phrase) {
 }
 ```
 
-## Error Handling
+## Обработка ошибок
 
-### Robust Error Management
+### Надёжное управление ошибками
 
-#### Data Loading Errors
+#### Ошибки загрузки данных
 ```javascript
 showError(error) {
-  console.error('Quiz initialization error:', error);
+  console.error('Ошибка инициализации викторины:', error);
   
   const errorMessage = `
     <div class="error-screen">
@@ -458,15 +458,15 @@ showError(error) {
 }
 ```
 
-## Performance Optimization
+## Оптимизация производительности
 
-### Efficient Data Handling
+### Эффективная обработка данных
 
-#### Memory Management
+#### Управление памятью
 ```javascript
-// Optimize memory usage for large datasets
+// Оптимизация использования памяти для больших наборов данных
 filterPhrasesByCategory(data) {
-  // Only keep necessary phrase data
+  // Сохранять только необходимые данные фраз
   this.phrases = data.phrases
     .filter(this.isValidPhrase)
     .map(phrase => ({
@@ -485,9 +485,9 @@ isValidPhrase(phrase) {
 }
 ```
 
-### UI Performance
+### Производительность интерфейса
 ```javascript
-// Efficient DOM updates
+// Эффективные обновления DOM
 updateUIElement(elementId, content) {
   const element = document.getElementById(elementId);
   if (element && element.textContent !== content) {
@@ -495,7 +495,7 @@ updateUIElement(elementId, content) {
   }
 }
 
-// Batch DOM operations
+// Пакетные операции DOM
 batchUIUpdates(updates) {
   requestAnimationFrame(() => {
     updates.forEach(update => {
@@ -508,9 +508,9 @@ batchUIUpdates(updates) {
 }
 ```
 
-## Accessibility Features
+## Функции доступности
 
-### Keyboard Navigation
+### Навигация с клавиатуры
 ```javascript
 setupKeyboardNavigation() {
   document.addEventListener('keydown', (event) => {
@@ -532,9 +532,9 @@ setupKeyboardNavigation() {
 }
 ```
 
-### Screen Reader Support
+### Поддержка экранного диктора
 ```html
-<!-- Accessible quiz interface -->
+<!-- Доступный интерфейс викторины -->
 <div class="quiz-container" role="main" aria-live="polite">
   <div class="question-section">
     <h2 class="phrase" id="phrase" aria-label="Фразеологизм для определения"></h2>
@@ -543,27 +543,27 @@ setupKeyboardNavigation() {
   <div class="answers-section" role="group" aria-labelledby="question-prompt">
     <p id="question-prompt">Выберите правильное значение:</p>
     <div class="answer-options" role="radiogroup">
-      <!-- Dynamic answer buttons with proper ARIA labels -->
+      <!-- Динамические кнопки ответов с правильными метками ARIA -->
     </div>
   </div>
 </div>
 ```
 
-## Future Enhancements
+## Будущие улучшения
 
-### Planned Features
-- **Difficulty Levels**: Adaptive questioning based on user performance
-- **Spaced Repetition**: Review of previously incorrect answers
-- **Custom Categories**: User-defined phrase collections
-- **Progress Persistence**: Save and restore quiz progress
-- **Multiplayer Mode**: Competitive quiz functionality
+### Планируемые функции
+- **Уровни сложности**: Адаптивные вопросы на основе производительности пользователя
+- **Интервальное повторение**: Повторение ранее неправильных ответов
+- **Пользовательские категории**: Пользовательские коллекции фраз
+- **Сохранение прогресса**: Сохранение и восстановление прогресса викторины
+- **Многопользовательский режим**: Конкурентная функциональность викторины
 
-### Technical Improvements
-- **Offline Support**: Service worker for offline quiz capability
-- **Advanced Analytics**: Detailed learning analytics
-- **Performance Monitoring**: Quiz performance metrics
-- **A/B Testing**: Interface optimization experiments
+### Технические улучшения
+- **Автономная поддержка**: Сервис-воркер для автономных возможностей викторины
+- **Продвинутая аналитика**: Подробная аналитика обучения
+- **Мониторинг производительности**: Метрики производительности викторины
+- **A/B тестирование**: Эксперименты по оптимизации интерфейса
 
 ---
 
-*The quiz system provides an engaging and educational way to learn Russian phraseological units while maintaining high performance and accessibility standards.*
+*Система викторин предоставляет увлекательный и образовательный способ изучать русские фразеологические единицы, сохраняя высокую производительность и стандарты доступности.*

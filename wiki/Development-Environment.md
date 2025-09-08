@@ -1,28 +1,28 @@
-# Development Environment
+# Среда разработки
 
-## Overview
+## Обзор
 
-This guide provides comprehensive instructions for setting up and maintaining the frazeologizms development environment. The project uses a Python-based processing pipeline with a static frontend, designed for educational content delivery and ease of maintenance.
+Это руководство предоставляет исчерпывающие инструкции по настройке и поддержанию среды разработки фразеологизмов. Проект использует конвейер обработки на основе Python со статическим фронтендом, разработанный для доставки образовательного контента и лёгкости обслуживания.
 
-## Prerequisites
+## Предварительные требования
 
-### System Requirements
+### Системные требования
 
-#### Operating System
-- **Windows 10/11** (primary development environment)
-- **macOS 10.15+** (supported)
-- **Linux Ubuntu 18.04+** (supported)
+#### Операционная система
+- **Windows 10/11** (основная среда разработки)
+- **macOS 10.15+** (поддерживается)
+- **Linux Ubuntu 18.04+** (поддерживается)
 
-#### Required Software
-- **Python 3.9+** (recommended: Python 3.11)
-- **Git** for version control
-- **Web Browser** (Chrome, Firefox, Safari, Edge)
-- **Text Editor/IDE** (VS Code recommended)
+#### Необходимое программное обеспечение
+- **Python 3.9+** (рекомендуется: Python 3.11)
+- **Git** для контроля версий
+- **Веб-браузер** (Chrome, Firefox, Safari, Edge)
+- **Текстовый редактор/IDE** (рекомендуется VS Code)
 
-### Hardware Requirements
-- **RAM**: Minimum 4GB, recommended 8GB+
-- **Storage**: 2GB free space for project and dependencies
-- **Network**: Internet connection for package installation
+### Требования к оборудованию
+- **ОПЕРАТИВНАЯ ПАМЯТЬ**: Минимум 4GB, рекомендуется 8GB+
+- **НАКОПИТЕЛЬ**: 2GB свободного места для проекта и зависимостей
+- **СЕТЬ**: Интернет-соединение для установки пакетов
 
 ## Initial Setup
 

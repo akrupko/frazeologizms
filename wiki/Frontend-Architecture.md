@@ -1,22 +1,22 @@
-# Frontend Architecture
+# Архитектура фронтенда
 
-## Overview
+## Обзор
 
-The frazeologizms frontend employs a **component-based architecture** with dynamic loading capabilities, creating a modern, maintainable, and performant user interface. The system combines static HTML generation with client-side JavaScript components for optimal performance and user experience.
+Фронтенд фразеологизмов использует **компонентную архитектуру** с возможностями динамической загрузки, создавая современный, поддерживаемый и производительный пользовательский интерфейс. Система объединяет генерацию статического HTML с клиентскими JavaScript-компонентами для оптимальной производительности и пользовательского опыта.
 
-## Architectural Principles
+## Принципы архитектуры
 
-### Component-Based Design
-- **Modularity**: Reusable HTML components for consistent UI
-- **Separation of Concerns**: Clear distinction between structure, style, and behavior
-- **Dynamic Loading**: JavaScript-powered component injection
-- **Maintainability**: Single-point updates for shared components
+### Компонентный дизайн
+- **Модульность**: Переиспользуемые HTML-компоненты для единообразного интерфейса
+- **Разделение ответственности**: Отчётливое различие между структурой, стилем и поведением
+- **Динамическая загрузка**: Внедрение компонентов на JavaScript
+- **Поддерживаемость**: Обновления общих компонентов в одном месте
 
-### Progressive Enhancement
-- **Static Foundation**: HTML-first approach for SEO and accessibility
-- **JavaScript Enhancement**: Progressive feature addition
-- **Graceful Degradation**: Functional without JavaScript
-- **Performance**: Fast initial load with enhanced interactivity
+### Постепенное улучшение
+- **Статическая основа**: Подход HTML-first для SEO и доступности
+- **JavaScript-улучшение**: Постепенное добавление функций
+- **Корректная деградация**: Работа без JavaScript
+- **Производительность**: Быстрая первоначальная загрузка с улучшенной интерактивностью
 
 ## Core Architecture
 
