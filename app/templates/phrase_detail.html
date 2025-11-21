@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+
+{% block title %}{{ phrase.phrase }} - {{ phrase.category or 'Фразеологизм' }} | Тренажер фразеологизмов{% endblock %}
+
+{% block description %}{{ phrase.phrase }}: {{ phrase.meanings[0] if phrase.meanings and phrase.meanings|length > 0 else 'Значение и происхождение фразеологизма' }}. Изучение русских идиом и фразеологических выражений.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs -->
+<nav class="breadcrumbs">
+    <ol class="breadcrumb-list">
+        {% for crumb in breadcrumbs %}
+            {% if crumb.url %}
+                <li><a href="{{ crumb.url }}">{{ crumb.title }}</a></li>
+            {% else %}
+                <li class="current">{{ crumb.title }}</li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</nav>
+
+<!-- Phrase Detail Card -->
+<article class="phrase-detail">
+    <header class="phrase-header">
+        <h1 class="phrase-title">{{ phrase.phrase }}</h1>
+        {% if phrase.category %}
+            <div class="phrase-category">
+                <span class="category-chip">{{ phrase.category }}</span>
+            </div>
+        {% endif %}
+    </header>
+
+    <div class="phrase-content">
+        <!-- Phrase Image -->
+        {% if phrase_image %}
+            <div class="phrase-image">
+                <img src="{{ url_for('static', filename=phrase_image) }}" 
+                     alt="{{ phrase.phrase }}" 
+                     loading="lazy"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="fallback-illustration" style="display: none;">
+                    <div class="phrase-illustration">📚</div>
+                </div>
+            </div>
+        {% else %}
+            <div class="phrase-image">
+                <div class="fallback-illustration">
+                    <div class="phrase-illustration">📚</div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Meanings Section -->
+        {% if phrase.meanings and phrase.meanings|length > 0 %}
+            <section class="phrase-section">
+                <h2>Значение</h2>
+                <div class="meanings-list">
+                    {% for meaning in phrase.meanings %}
+                        <div class="meaning-item">
+                            <p>{{ meaning }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+        <!-- Etymology Section -->
+        {% if phrase.etymology %}
+            <section class="phrase-section">
+                <h2>Происхождение</h2>
+                <div class="etymology-content">
+                    <p>{{ phrase.etymology }}</p>
+                </div>
+            </section>
+        {% endif %}
+
+        <!-- Usage Example Section -->
+        <section class="phrase-section">
+            <h2>Пример использования</h2>
+            <div class="usage-example">
+                <blockquote class="example-quote">
+                    <p>— Ты должен <strong>{{ phrase.phrase }}</strong>, если хочешь добиться успеха.</p>
+                    <cite>Пример употребления в современной речи</cite>
+                </blockquote>
+            </div>
+        </section>
+    </div>
+</article>
+
+<!-- Related Phrases -->
+{% if related_phrases %}
+    <section class="related-phrases">
+        <h2>Похожие фразеологизмы</h2>
+        <div class="related-grid">
+            {% for related in related_phrases %}
+                <a href="{{ url_for('web.phrase_detail', phrase_slug=related.slug) }}" 
+                   class="related-phrase-card">
+                    <h3>{{ related.phrase }}</h3>
+                    {% if related.meanings and related.meanings|length > 0 %}
+                        <p>{{ related.meanings[0][:100] }}{% if related.meanings[0]|length > 100 %}...{% endif %}</p>
+                    {% endif %}
+                    <span class="related-category">{{ related.category or 'Без категории' }}</span>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+
+<!-- Ad Placeholder -->
+<div class="ad-placeholder ad-content" data-ad-slot="phrase-detail-content">
+    <!-- Ad: In-Content (Large Rectangle 336x280 or 300x250) -->
+    <span class="ad-label">Реклама</span>
+</div>
+
+<!-- SEO Content Section -->
+<section class="seo-content phrase-seo">
+    <div class="seo-text">
+        <h2>Изучение фразеологизма "{{ phrase.phrase }}"</h2>
+        
+        <p>Фразеологизм "{{ phrase.phrase }}" является важной частью русского языка{% if phrase.category %} и относится к категории "{{ phrase.category }}"{% endif %}. Понимание таких выражений помогает обогатить речь и лучше понять культурный контекст.</p>
+        
+        <h3>Значение для подготовки к ЕГЭ и ОГЭ</h3>
+        <p>Знание фразеологизмов, включая "{{ phrase.phrase }}", необходимо для успешной сдачи экзаменов по русскому языку. В заданиях по фразологии часто встречаются вопросы о значении, происхождении и употреблении подобных выражений.</p>
+        
+        <ul class="seo-list">
+            <li>📖 Понимание лексического значения и стилистических особенностей</li>
+            <li>🔍 Умение определять контекст употребления фразеологизма</li>
+            <li>💡 Знание этимологии и истории происхождения</li>
+            <li>✍️ Навыки правильного использования в письменной и устной речи</li>
+        </ul>
+        
+        <p class="seo-footer">Регулярное изучение фразеологизмов поможет вам свободно владеть русским языком и успешно справляться с экзаменационными заданиями.</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.phrase-detail {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.breadcrumbs {
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-list li {
+    margin-right: 0.5rem;
+}
+
+.breadcrumb-list li:not(.current):after {
+    content: "›";
+    margin-left: 0.5rem;
+    color: #666;
+}
+
+.breadcrumb-list a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.breadcrumb-list a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-list .current {
+    color: #666;
+    font-weight: 500;
+}
+
+.phrase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.phrase-title {
+    font-size: 2.5rem;
+    margin: 0;
+    color: #333;
+    line-height: 1.2;
+}
+
+.category-chip {
+    background: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.phrase-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.phrase-image {
+    grid-row: span 3;
+}
+
+.phrase-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.fallback-illustration {
+    width: 100%;
+    height: 200px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #dee2e6;
+}
+
+.phrase-illustration {
+    font-size: 4rem;
+    opacity: 0.5;
+}
+
+.phrase-section {
+    margin-bottom: 2rem;
+}
+
+.phrase-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+}
+
+.meanings-list .meaning-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.meanings-list .meaning-item p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.etymology-content {
+    background: #fff3cd;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #ffc107;
+}
+
+.etymology-content p {
+    margin: 0;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.usage-example {
+    background: #e7f3ff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.example-quote {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.example-quote p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.example-quote cite {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: normal;
+}
+
+.related-phrases {
+    margin-bottom: 2rem;
+}
+
+.related-phrases h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.related-phrase-card {
+    display: block;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.related-phrase-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-color: #007bff;
+}
+
+.related-phrase-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    color: #007bff;
+}
+
+.related-phrase-card p {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.related-category {
+    font-size: 0.8rem;
+    color: #6c757d;
+    background: #f8f9fa;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .phrase-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .phrase-image {
+        grid-row: span 1;
+    }
+    
+    .phrase-title {
+        font-size: 2rem;
+    }
+    
+    .phrase-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+{% endblock %}

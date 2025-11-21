@@ -1,0 +1,602 @@
+{% extends "base.html" %}
+
+{% block title %}Поиск фразеологизмов в тексте | Тренажер фразеологизмов{% endblock %}
+
+{% block description %}Найдите все фразеологизмы в вашем тексте. Вставьте любой текст и получите список найденных русских идиом с подсчетом их встречаемости.{% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs -->
+<nav class="breadcrumbs">
+    <ol class="breadcrumb-list">
+        {% for crumb in breadcrumbs %}
+            {% if crumb.url %}
+                <li><a href="{{ crumb.url }}">{{ crumb.title }}</a></li>
+            {% else %}
+                <li class="current">{{ crumb.title }}</li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</nav>
+
+<!-- Search Text Section -->
+<section class="search-text-section">
+    <div class="search-container">
+        <header class="search-header">
+            <h1>Поиск фразеологизмов в тексте</h1>
+            <p class="search-description">
+                Вставьте любой текст, и мы найдем в нем все известные фразеологизмы и идиомы.
+            </p>
+        </header>
+
+        <form class="text-search-form" method="POST" action="{{ url_for('web.search_in_text') }}">
+            <div class="form-group">
+                <label for="text" class="form-label">Введите или вставьте текст:</label>
+                <textarea 
+                    name="text" 
+                    id="text" 
+                    class="text-input" 
+                    placeholder="Введите или вставьте любой текст на русском языке..."
+                    rows="10"
+                    required>{{ text }}</textarea>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="search-button">
+                    🔍 Найти фразеологизмы
+                </button>
+                <button type="button" class="clear-button" onclick="document.getElementById('text').value = ''">
+                    🗑️ Очистить
+                </button>
+            </div>
+        </form>
+
+        {% if matches %}
+            <div class="results-summary">
+                <h2>Результаты поиска</h2>
+                <p class="results-info">
+                    В тексте найдено <strong>{{ matches|length }}</strong> фразеологизмов:
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Search Results -->
+{% if matches %}
+    <section class="text-search-results">
+        <div class="results-container">
+            {% if matches|length > 0 %}
+                <div class="matches-list">
+                    {% for match in matches %}
+                        <article class="match-item">
+                            <div class="match-header">
+                                <h3 class="match-phrase">
+                                    <a href="{{ url_for('web.phrase_detail', phrase_slug=match.phrase.slug) }}" 
+                                       class="phrase-link">
+                                        {{ match.phrase.phrase }}
+                                    </a>
+                                </h3>
+                                <div class="match-info">
+                                    <span class="match-count">
+                                        Найдено: {{ match.count }} {{ 'раз' if match.count == 1 else 'раза' if match.count < 5 else 'раз' }}
+                                    </span>
+                                    {% if match.phrase.category %}
+                                        <span class="match-category">{{ match.phrase.category }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="match-content">
+                                {% if match.phrase.meanings and match.phrase.meanings|length > 0 %}
+                                    <div class="match-meaning">
+                                        <strong>Значение:</strong> {{ match.phrase.meanings[0] }}
+                                    </div>
+                                {% endif %}
+                                
+                                {% if match.phrase.etymology %}
+                                    <div class="match-etymology">
+                                        <strong>Происхождение:</strong> {{ match.phrase.etymology }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="match-actions">
+                                <a href="{{ url_for('web.phrase_detail', phrase_slug=match.phrase.slug) }}" 
+                                   class="detail-link">
+                                    Подробнее о фразеологизме →
+                                </a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+                <!-- Text Analysis -->
+                {% if text %}
+                    <div class="text-analysis">
+                        <h3>Анализ текста</h3>
+                        <div class="analysis-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Всего символов:</span>
+                                <span class="stat-value">{{ text|length }}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Слов в тексте:</span>
+                                <span class="stat-value">{{ text.split()|length }}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Найдено фразеологизмов:</span>
+                                <span class="stat-value">{{ matches|length }}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Всего вхождений:</span>
+                                <span class="stat-value">{{ matches|sum(attribute='count') }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-density">
+                            <strong>Плотность фразеологизмов:</strong> 
+                            {{ ((matches|sum(attribute='count') / text.split()|length * 100) | round(2)) }}%
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="no-matches">
+                    <div class="no-matches-icon">📝</div>
+                    <h3>Фразеологизмы не найдены</h3>
+                    <p>В предоставленном тексте не удалось найти известные фразеологизмы.</p>
+                    <div class="suggestions">
+                        <h4>Возможные причины:</h4>
+                        <ul>
+                            <li>Текст слишком короткий</li>
+                            <li>Используются редкие или новые выражения</li>
+                            <li>Фразеологизмы написаны с ошибками</li>
+                            <li>Текст на другом языке</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endif %}
+
+<!-- Alternative Search -->
+<section class="alternative-search">
+    <div class="alt-search-container">
+        <h2>Другие способы поиска</h2>
+        <div class="alt-search-options">
+            <a href="{{ url_for('web.search') }}" class="alt-search-link">
+                <div class="alt-search-icon">🔍</div>
+                <div class="alt-search-content">
+                    <h3>Поиск по фразе</h3>
+                    <p>Найдите фразеологизм по значению или тексту</p>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('web.home') }}" class="alt-search-link">
+                <div class="alt-search-icon">📚</div>
+                <div class="alt-search-content">
+                    <h3>Обзор по категориям</h3>
+                    <p>Изучите фразеологизмы по темам</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Ad Placeholder -->
+<div class="ad-placeholder ad-content" data-ad-slot="search-text-results">
+    <!-- Ad: In-Content (Large Rectangle 336x280 or 300x250) -->
+    <span class="ad-label">Реклама</span>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.breadcrumbs {
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-list li {
+    margin-right: 0.5rem;
+}
+
+.breadcrumb-list li:not(.current):after {
+    content: "›";
+    margin-left: 0.5rem;
+    color: #666;
+}
+
+.breadcrumb-list a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.breadcrumb-list a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-list .current {
+    color: #666;
+    font-weight: 500;
+}
+
+.search-text-section {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.search-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.search-header h1 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.search-description {
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.text-search-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.text-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.text-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.search-button {
+    padding: 1rem 2rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background: #0056b3;
+}
+
+.clear-button {
+    padding: 1rem 2rem;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-button:hover {
+    background: #545b62;
+}
+
+.results-summary {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+}
+
+.results-summary h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.results-info {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.text-search-results {
+    margin-bottom: 2rem;
+}
+
+.results-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.matches-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.match-item {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.match-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-color: #007bff;
+}
+
+.match-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.match-phrase {
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.phrase-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.phrase-link:hover {
+    text-decoration: underline;
+}
+
+.match-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.match-count {
+    background: #28a745;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.match-category {
+    background: #e9ecef;
+    color: #495057;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+.match-content {
+    margin-bottom: 1rem;
+}
+
+.match-meaning,
+.match-etymology {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.match-actions {
+    text-align: right;
+}
+
+.detail-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.detail-link:hover {
+    text-decoration: underline;
+}
+
+.text-analysis {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.text-analysis h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.analysis-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.stat-label {
+    color: #666;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #333;
+}
+
+.text-density {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.no-matches {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.no-matches-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.no-matches h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.suggestions {
+    text-align: left;
+    max-width: 400px;
+    margin: 2rem auto 0;
+}
+
+.suggestions h4 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.suggestions ul {
+    padding-left: 1.5rem;
+}
+
+.suggestions li {
+    margin-bottom: 0.25rem;
+}
+
+.alternative-search {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.alt-search-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.alt-search-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.alt-search-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.alt-search-link:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.alt-search-icon {
+    font-size: 2rem;
+    opacity: 0.7;
+}
+
+.alt-search-content h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.alt-search-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .search-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .match-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .match-info {
+        align-items: flex-start;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .analysis-stats {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

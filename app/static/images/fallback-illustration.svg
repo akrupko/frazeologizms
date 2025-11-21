@@ -1,0 +1,18 @@
+<!-- Fallback illustration for phrase images when no specific image is available -->
+<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#f8f9fa"/>
+  <rect width="300" height="200" fill="none" stroke="#dee2e6" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- Book icon -->
+  <g transform="translate(150, 100)">
+    <rect x="-40" y="-30" width="80" height="60" fill="#007bff" rx="4"/>
+    <rect x="-35" y="-25" width="70" height="50" fill="white" rx="2"/>
+    <line x1="-25" y1="-10" x2="25" y2="-10" stroke="#007bff" stroke-width="2"/>
+    <line x1="-25" y1="0" x2="25" y2="0" stroke="#007bff" stroke-width="2"/>
+    <line x1="-25" y1="10" x2="15" y2="10" stroke="#007bff" stroke-width="2"/>
+  </g>
+  
+  <text x="150" y="150" text-anchor="middle" fill="#6c757d" font-family="Arial, sans-serif" font-size="14">
+    Фразеологизм
+  </text>
+</svg>

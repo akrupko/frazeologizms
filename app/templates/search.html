@@ -1,0 +1,548 @@
+{% extends "base.html" %}
+
+{% block title %}{% if query %}Результаты поиска: "{{ query }}"{% else %}Поиск фразеологизмов{% endif %} | Тренажер фразеологизмов{% endblock %}
+
+{% block description %}{% if query %}Результаты поиска по запросу "{{ query }}". Найдено фразеологизмов: {{ pagination.total if pagination else 0 }}.{% else %}Поиск фразеологизмов русского языка по значению, происхождению и тексту.{% endif %} {% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs -->
+<nav class="breadcrumbs">
+    <ol class="breadcrumb-list">
+        {% for crumb in breadcrumbs %}
+            {% if crumb.url %}
+                <li><a href="{{ crumb.url }}">{{ crumb.title }}</a></li>
+            {% else %}
+                <li class="current">{{ crumb.title }}</li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</nav>
+
+<!-- Search Section -->
+<section class="search-section">
+    <div class="search-container">
+        <h1>Поиск фразеологизмов</h1>
+        
+        <form class="search-form" method="GET" action="{{ url_for('web.search') }}">
+            <div class="search-input-group">
+                <input type="search" 
+                       name="q" 
+                       value="{{ query }}" 
+                       placeholder="Введите фразу для поиска..." 
+                       class="search-input"
+                       minlength="2"
+                       required>
+                <button type="submit" class="search-button">🔍 Найти</button>
+            </div>
+        </form>
+
+        {% if query %}
+            {% if pagination and pagination.total > 0 %}
+                <div class="search-info">
+                    <p class="results-count">
+                        Найдено результатов: <strong>{{ pagination.total }}</strong>
+                        {% if pagination.pages > 1 %}
+                            (страница {{ pagination.page }} из {{ pagination.pages }})
+                        {% endif %}
+                    </p>
+                </div>
+            {% else %}
+                <div class="no-results">
+                    <div class="no-results-icon">🔍</div>
+                    <h3>Ничего не найдено</h3>
+                    <p>По запросу "{{ query }}" не найдено фразеологизмов.</p>
+                    <div class="search-tips">
+                        <h4>Советы:</h4>
+                        <ul>
+                            <li>Попробуйте использовать другие слова</li>
+                            <li>Проверьте правильность написания</li>
+                            <li>Используйте более короткий запрос</li>
+                            <li>Попробуйте поискать часть фразы</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</section>
+
+<!-- Search Results -->
+{% if query and results %}
+    <section class="search-results">
+        <div class="results-list">
+            {% for phrase in results %}
+                <article class="result-item">
+                    <div class="result-header">
+                        <h3>
+                            <a href="{{ url_for('web.phrase_detail', phrase_slug=phrase.slug) }}" 
+                               class="result-title">
+                                {{ search_service.highlight_matches(phrase.phrase, query) | safe }}
+                            </a>
+                        </h3>
+                        {% if phrase.category %}
+                            <span class="result-category">{{ phrase.category }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="result-content">
+                        {% if phrase.meanings and phrase.meanings|length > 0 %}
+                            <div class="result-meaning">
+                                <strong>Значение:</strong> 
+                                {{ search_service.highlight_matches(phrase.meanings[0], query) | safe }}
+                            </div>
+                        {% endif %}
+                        
+                        {% if phrase.etymology %}
+                            <div class="result-etymology">
+                                <strong>Происхождение:</strong> 
+                                {{ search_service.highlight_matches(phrase.etymology, query) | safe }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="result-footer">
+                        <a href="{{ url_for('web.phrase_detail', phrase_slug=phrase.slug) }}" 
+                           class="result-link">
+                            Подробнее →
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    {% if pagination and pagination.pages > 1 %}
+        <nav class="pagination">
+            <div class="pagination-info">
+                Страница {{ pagination.page }} из {{ pagination.pages }}
+            </div>
+            
+            <div class="pagination-controls">
+                {% if pagination.has_prev %}
+                    <a href="{{ url_for('web.search', q=query, page=pagination.prev_num) }}" 
+                       class="pagination-link prev">
+                        ← Назад
+                    </a>
+                {% endif %}
+                
+                {% set start_page = [1, pagination.page - 2]|max %}
+                {% set end_page = [pagination.pages, pagination.page + 2]|min %}
+                
+                {% if start_page > 1 %}
+                    <a href="{{ url_for('web.search', q=query, page=1) }}" class="pagination-link">1</a>
+                    {% if start_page > 2 %}
+                        <span class="pagination-ellipsis">...</span>
+                    {% endif %}
+                {% endif %}
+                
+                {% for page_num in range(start_page, end_page + 1) %}
+                    {% if page_num == pagination.page %}
+                        <span class="pagination-link current">{{ page_num }}</span>
+                    {% else %}
+                        <a href="{{ url_for('web.search', q=query, page=page_num) }}" 
+                           class="pagination-link">{{ page_num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if end_page < pagination.pages %}
+                    {% if end_page < pagination.pages - 1 %}
+                        <span class="pagination-ellipsis">...</span>
+                    {% endif %}
+                    <a href="{{ url_for('web.search', q=query, page=pagination.pages) }}" 
+                       class="pagination-link">{{ pagination.pages }}</a>
+                {% endif %}
+                
+                {% if pagination.has_next %}
+                    <a href="{{ url_for('web.search', q=query, page=pagination.next_num) }}" 
+                       class="pagination-link next">
+                        Вперед →
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+{% endif %}
+
+<!-- Alternative Search -->
+<section class="alternative-search">
+    <div class="alt-search-container">
+        <h2>Другие способы поиска</h2>
+        <div class="alt-search-options">
+            <a href="{{ url_for('web.search_text') }}" class="alt-search-link">
+                <div class="alt-search-icon">📝</div>
+                <div class="alt-search-content">
+                    <h3>Поиск в тексте</h3>
+                    <p>Вставьте текст и найдите все фразеологизмы в нем</p>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('web.home') }}" class="alt-search-link">
+                <div class="alt-search-icon">📚</div>
+                <div class="alt-search-content">
+                    <h3>Обзор по категориям</h3>
+                    <p>Изучите фразеологизмы по темам</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Ad Placeholder -->
+<div class="ad-placeholder ad-content" data-ad-slot="search-results">
+    <!-- Ad: In-Content (Large Rectangle 336x280 or 300x250) -->
+    <span class="ad-label">Реклама</span>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.breadcrumbs {
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-list li {
+    margin-right: 0.5rem;
+}
+
+.breadcrumb-list li:not(.current):after {
+    content: "›";
+    margin-left: 0.5rem;
+    color: #666;
+}
+
+.breadcrumb-list a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.breadcrumb-list a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-list .current {
+    color: #666;
+    font-weight: 500;
+}
+
+.search-section {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.search-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+    font-size: 2rem;
+}
+
+.search-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.search-button {
+    padding: 1rem 2rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background: #0056b3;
+}
+
+.search-info {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.results-count {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.no-results-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.no-results h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.search-tips {
+    text-align: left;
+    max-width: 400px;
+    margin: 2rem auto 0;
+}
+
+.search-tips h4 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.search-tips ul {
+    padding-left: 1.5rem;
+}
+
+.search-tips li {
+    margin-bottom: 0.25rem;
+}
+
+.search-results {
+    margin-bottom: 2rem;
+}
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.result-item {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.result-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-color: #007bff;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.result-title {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.result-title:hover {
+    text-decoration: underline;
+}
+
+.result-category {
+    background: #e9ecef;
+    color: #495057;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.result-content {
+    margin-bottom: 1rem;
+}
+
+.result-meaning,
+.result-etymology {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.result-footer {
+    text-align: right;
+}
+
+.result-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.result-link:hover {
+    text-decoration: underline;
+}
+
+mark {
+    background: #fff3cd;
+    padding: 0.1rem 0.2rem;
+    border-radius: 3px;
+}
+
+.pagination {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pagination-info {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination-link {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #007bff;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.pagination-link:hover {
+    background: #e9ecef;
+    border-color: #007bff;
+}
+
+.pagination-link.current {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination-ellipsis {
+    padding: 0.5rem;
+    color: #666;
+}
+
+.alternative-search {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.alt-search-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.alt-search-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.alt-search-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.alt-search-link:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.alt-search-icon {
+    font-size: 2rem;
+    opacity: 0.7;
+}
+
+.alt-search-content h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.alt-search-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .search-container h1 {
+        font-size: 1.5rem;
+    }
+    
+    .search-input-group {
+        flex-direction: column;
+    }
+    
+    .result-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .pagination {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .pagination-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
