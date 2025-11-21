@@ -20,24 +20,25 @@ class PhraseologyTrainer {
     
     async loadPhrases() {
         try {
-            console.log('Loading table_phrases.json...');
+            console.log('Loading phrases from API...');
             
-            // Try to detect if we're running from file:// protocol
-            const isFileProtocol = window.location.protocol === 'file:';
-            if (isFileProtocol) {
-                console.warn('Running from file:// protocol - some browsers may have CORS restrictions');
+            // Get current category from URL or window variable
+            const currentCategory = window.CURRENT_CATEGORY || this.getCategoryFromURL();
+            
+            // Build API URL with parameters
+            const apiUrl = new URL(`${window.API_BASE_URL}/phrases`);
+            if (currentCategory && currentCategory !== 'general') {
+                apiUrl.searchParams.append('category', currentCategory);
             }
+            apiUrl.searchParams.append('limit', '1000'); // Load more phrases for better quiz variety
             
-            const response = await fetch('table_phrases.json');
+            const response = await fetch(apiUrl.toString());
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
             }
             
             const data = await response.json();
-            
-            // Get current category from URL or window variable
-            const currentCategory = window.CURRENT_CATEGORY || this.getCategoryFromURL();
             
             // Store all phrases for use in generating incorrect answers
             const allValidPhrases = data.phrases ? data.phrases.filter(phrase => {
@@ -47,24 +48,15 @@ class PhraseologyTrainer {
                        phrase.meanings[0].trim().length > 10;
             }) : [];
             
-            // Filter phrases based on category
+            // Filter phrases based on category (API already filtered, but ensure consistency)
             if (currentCategory && currentCategory !== 'general') {
-                // Filter by specific category
                 this.phrases = allValidPhrases.filter(phrase => phrase.category === currentCategory);
-                
-                // Store all phrases for generating incorrect options if needed
-                this.allPhrases = allValidPhrases;
-                
-                // Set category name for display
-                const categoryInfo = data.categories && data.categories[currentCategory];
-                if (categoryInfo) {
-                    window.CATEGORY_NAME = categoryInfo.name;
-                }
+                this.allPhrases = allValidPhrases; // Store all for generating incorrect options
             } else {
                 // Use all phrases for general category
                 this.phrases = allValidPhrases;
                 this.allPhrases = allValidPhrases;
-                window.CATEGORY_NAME = 'Все категории';
+                window.CATEGORY_NAME = window.CATEGORY_NAME || 'Все категории';
             }
             
             console.log(`Loaded ${this.phrases.length} valid phrases for ${window.CATEGORY_NAME}`);
@@ -79,12 +71,6 @@ class PhraseologyTrainer {
             
         } catch (error) {
             console.error('Error loading phrases:', error);
-            
-            // Provide more specific error information
-            if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                console.error('CORS or network error - this might be due to browser security restrictions when running from file:// protocol');
-            }
-            
             this.showError(error);
         }
     }

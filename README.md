@@ -51,31 +51,248 @@ requirements.txt        # Python dependencies
 ### Prerequisites
 
 - Python 3.8+
-- MySQL database with `phraseological_dict` table
-- pip or poetry for package management
+- MySQL database (for production) or SQLite (for development)
+- pip package manager
 
-### 1. Setup Virtual Environment
+### Installation
 
+1. Clone the repository:
 ```bash
-python -m venv .venv
+git clone <repository-url>
+cd frazeologizmy
+```
+
+2. Create and activate a virtual environment:
+```bash
+python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-### 2. Install Dependencies
-
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure Environment
-
-Copy `.env.example` to `.env` and update with your database credentials:
-
+4. Set up environment variables:
 ```bash
 cp .env.example .env
+# Edit .env with your database credentials
 ```
 
-Edit `.env` with your actual credentials:
+5. Run the development server:
+```bash
+flask --app app run
+# or
+python start_server.py
+```
+
+The application will be available at `http://127.0.0.1:5000`
+
+## API Documentation
+
+The application provides a RESTful API for accessing phraseological data. All API endpoints are prefixed with `/api/`.
+
+### Endpoints
+
+#### 1. Get Phrases
+```
+GET /api/phrases
+```
+
+**Parameters:**
+- `category` (optional): Filter by category name
+- `limit` (optional): Number of phrases to return (default: 20)
+- `offset` (optional): Number of phrases to skip (default: 0)
+- `random` (optional): Return random phrases if set to 'true'
+
+**Response:**
+```json
+{
+  "phrases": [
+    {
+      "id": 1,
+      "phrase": "бить баклуши",
+      "meanings": ["бездельничать, лениться"],
+      "etymology": "Старинное выражение...",
+      "category": "work",
+      "slug": "bit-baklushi"
+    }
+  ],
+  "total": 1200,
+  "limit": 20,
+  "offset": 0
+}
+```
+
+**Examples:**
+```bash
+# Get all phrases (first 20)
+GET /api/phrases
+
+# Get phrases from 'work' category
+GET /api/phrases?category=work
+
+# Get 10 random phrases
+GET /api/phrases?random=true&limit=10
+
+# Get phrases with pagination
+GET /api/phrases?limit=50&offset=100
+```
+
+#### 2. Search Phrases
+```
+GET /api/phrases/search
+```
+
+**Parameters:**
+- `q` (required): Search query (minimum 2 characters)
+- `limit` (optional): Number of results to return (default: 20)
+
+**Response:**
+```json
+{
+  "phrases": [
+    {
+      "id": 1,
+      "phrase": "бить баклуши",
+      "meanings": ["бездельничать, лениться"],
+      "etymology": "Старинное выражение...",
+      "category": "work",
+      "slug": "bit-baklushi"
+    }
+  ],
+  "query": "баклуши"
+}
+```
+
+#### 3. Get Categories
+```
+GET /api/categories
+```
+
+**Response:**
+```json
+{
+  "categories": [
+    {
+      "key": "work",
+      "name": "Труд и работа",
+      "slug": "trud-i-rabota",
+      "count": 45,
+      "icon": "⚙️",
+      "seo": {
+        "title": "Фразеологизмы: Труд и работа",
+        "description": "Идиомы о трудовой деятельности..."
+      },
+      "description": "Идиомы о трудовой деятельности, профессиях и рабочих процессах"
+    }
+  ]
+}
+```
+
+#### 4. Autocomplete Search
+```
+GET /api/search
+```
+
+**Parameters:**
+- `q` (required): Search query (minimum 2 characters)
+- `limit` (optional): Number of results to return (default: 10)
+
+**Response:**
+```json
+{
+  "results": [
+    {
+      "id": 1,
+      "phrase": "бить баклуши",
+      "category": "work",
+      "slug": "bit-baklushi",
+      "meanings": ["бездельничать, лениться"]
+    }
+  ],
+  "query": "бак"
+}
+```
+
+#### 5. Get Single Phrase
+```
+GET /api/phrases/<id>
+```
+
+**Response:**
+```json
+{
+  "id": 1,
+  "phrase": "бить баклуши",
+  "meanings": ["бездельничать, лениться"],
+  "etymology": "Старинное выражение...",
+  "category": "work",
+  "slug": "bit-baklushi"
+}
+```
+
+#### 6. Health Check
+```
+GET /api/health
+```
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "database": "connected",
+  "phrases_count": 1200
+}
+```
+
+### Caching
+
+API endpoints implement caching headers for optimal performance:
+- **Phrases endpoint**: 5 minutes (300 seconds)
+- **Categories endpoint**: 1 hour (3600 seconds) 
+- **Search endpoints**: 3 minutes (180 seconds)
+- **Individual phrases**: 1 hour (3600 seconds)
+
+All responses include appropriate `Cache-Control` headers for browser caching.
+
+### Error Handling
+
+The API returns appropriate HTTP status codes:
+- `200`: Success
+- `400`: Bad request (e.g., search query too short)
+- `404`: Resource not found
+- `500`: Internal server error
+
+Error responses include descriptive messages:
+```json
+{
+  "error": "Query must be at least 2 characters"
+}
+```
+
+### JavaScript Integration
+
+The frontend automatically uses these API endpoints. The base API URL is exposed as `window.API_BASE_URL` in all templates.
+
+**Example usage:**
+```javascript
+// Load phrases for a specific category
+const response = await fetch(`${window.API_BASE_URL}/phrases?category=work&limit=50`);
+const data = await response.json();
+
+// Search phrases
+const searchResponse = await fetch(`${window.API_BASE_URL}/search?q=баклуши`);
+const searchData = await searchResponse.json();
+
+// Load categories
+const categoriesResponse = await fetch(`${window.API_BASE_URL}/categories`);
+const categoriesData = await categoriesResponse.json();
+```
+
+## Development
+
+The application uses Flask with SQLAlchemy ORM and supports both MySQL (production) and SQLite (development/testing).
 
 ```env
 FLASK_ENV=development

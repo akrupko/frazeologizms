@@ -1,19 +1,23 @@
 """API routes for phraseological data."""
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, make_response
+from sqlalchemy import func
+import random
 
 from app.extensions import cache, db
 from app.models import PhraseologicalEntry
+from app.services.categories import category_service
 
 api_bp = Blueprint('api', __name__)
 
 
 @api_bp.route('/phrases', methods=['GET'])
-@cache.cached(timeout=300)
+@cache.cached(timeout=300, query_string=True)
 def get_phrases():
-    """Get all phrases with optional filtering."""
+    """Get all phrases with optional filtering for trainer compatibility."""
     category = request.args.get('category')
-    limit = request.args.get('limit', 20, type=int)
+    limit = request.args.get('limit', type=int)
     offset = request.args.get('offset', 0, type=int)
+    random_flag = request.args.get('random', 'false').lower() == 'true'
 
     query = PhraseologicalEntry.query
 
@@ -21,19 +25,32 @@ def get_phrases():
         query = query.filter_by(category=category)
 
     total = query.count()
-    phrases = query.offset(offset).limit(limit).all()
+    
+    # Handle random ordering
+    if random_flag:
+        phrases = query.order_by(func.random()).limit(limit or 20).all()
+    else:
+        phrases = query.offset(offset).limit(limit or 20).all()
 
-    return jsonify({
+    # Create response with Cache-Control headers
+    response = make_response(jsonify({
         'phrases': [p.to_dict() for p in phrases],
         'total': total,
-        'limit': limit,
+        'limit': limit or 20,
         'offset': offset,
-    })
+    }))
+    
+    # Set cache headers for trainer compatibility
+    response.cache_control.max_age = 300
+    response.cache_control.public = True
+    
+    return response
 
 
 @api_bp.route('/phrases/search', methods=['GET'])
+@cache.cached(timeout=180, query_string=True)
 def search_phrases():
-    """Search for phrases."""
+    """Search for phrases with autocomplete support."""
     q = request.args.get('q', '')
     limit = request.args.get('limit', 20, type=int)
 
@@ -42,10 +59,17 @@ def search_phrases():
 
     results = PhraseologicalEntry.search(q, limit=limit)
 
-    return jsonify({
+    # Create response with Cache-Control headers
+    response = make_response(jsonify({
         'phrases': [p.to_dict() for p in results],
         'query': q,
-    })
+    }))
+    
+    # Set cache headers for autocomplete
+    response.cache_control.max_age = 180
+    response.cache_control.public = True
+    
+    return response
 
 
 @api_bp.route('/phrases/<int:phrase_id>', methods=['GET'])
@@ -71,19 +95,70 @@ def get_phrase_by_slug(slug):
 @api_bp.route('/categories', methods=['GET'])
 @cache.cached(timeout=3600)
 def get_categories():
-    """Get all available categories."""
-    categories = db.session.query(
-        PhraseologicalEntry.category,
-        db.func.count(PhraseologicalEntry.id).label('count')
-    ).filter(PhraseologicalEntry.category.isnot(None)).group_by(
-        PhraseologicalEntry.category
-    ).all()
+    """Get all available categories with enriched metadata for trainer."""
+    # Get enriched categories from the category service
+    enriched_categories = category_service.get_all_categories_enriched()
+    
+    # Transform to match expected structure for trainer
+    categories_data = []
+    for cat in enriched_categories:
+        categories_data.append({
+            'key': cat['key'],
+            'name': cat['display_name'],
+            'slug': cat['slug'],
+            'count': cat['count'],
+            'icon': cat['icon'],
+            'seo': cat.get('seo', {}),
+            'description': cat.get('seo', {}).get('description', ''),
+        })
 
-    return jsonify({
-        'categories': [
-            {'name': cat[0], 'count': cat[1]} for cat in categories
-        ]
-    })
+    # Create response with Cache-Control headers
+    response = make_response(jsonify({
+        'categories': categories_data,
+    }))
+    
+    # Set cache headers for categories (changes rarely)
+    response.cache_control.max_age = 3600
+    response.cache_control.public = True
+    
+    return response
+
+
+@api_bp.route('/search', methods=['GET'])
+@cache.cached(timeout=180, query_string=True)
+def search_autocomplete():
+    """Search endpoint for autocomplete functionality."""
+    q = request.args.get('q', '')
+    limit = request.args.get('limit', 10, type=int)
+
+    if not q or len(q) < 2:
+        return jsonify({'results': [], 'error': 'Query must be at least 2 characters'}), 400
+
+    # Search in phrases and meanings
+    results = PhraseologicalEntry.search(q, limit=limit)
+    
+    # Format for autocomplete
+    autocomplete_results = []
+    for phrase in results:
+        autocomplete_results.append({
+            'id': phrase.id,
+            'phrase': phrase.phrase,
+            'category': phrase.category,
+            'slug': phrase.slug,
+            'meanings': phrase.meanings or [],
+        })
+
+    # Create response with Cache-Control headers
+    response = make_response(jsonify({
+        'results': autocomplete_results,
+        'query': q,
+    }))
+    
+    # Set cache headers for autocomplete
+    response.cache_control.max_age = 180
+    response.cache_control.public = True
+    
+    return response
 
 
 @api_bp.route('/health', methods=['GET'])

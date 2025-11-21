@@ -38,12 +38,6 @@ def category_page(category_slug):
     )
 
 
-@web_bp.route('/table_phrases.json')
-def table_phrases_data():
-    project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    return send_from_directory(project_root, 'table_phrases.json')
-
-
 @web_bp.route('/frazeologizm/<phrase_slug>/')
 def phrase_detail(phrase_slug):
     """Phrase detail page."""
