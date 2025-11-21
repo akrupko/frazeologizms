@@ -1,45 +1,43 @@
 #!/usr/bin/env python3
 """
-Simple HTTP server for the phraseological units website.
-Solves CORS issues in Chrome when running locally.
+Flask application server for the phraseological units website.
 
 Usage:
     python start_server.py
     
-Then open: http://localhost:8000
+Then open: http://localhost:5000
 """
 
-import http.server
-import socketserver
-import webbrowser
 import os
+import webbrowser
+from dotenv import load_dotenv
+from app import create_app
 
-PORT = 8000
+# Load environment variables from .env file
+load_dotenv()
 
-class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def end_headers(self):
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        super().end_headers()
+PORT = int(os.getenv('FLASK_PORT', 5000))
+HOST = os.getenv('FLASK_HOST', '127.0.0.1')
 
 def start_server():
+    """Start the Flask development server."""
+    app = create_app()
+    
     try:
-        with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
-            print(f"🚀 Сервер запущен на http://localhost:{PORT}")
-            print(f"📂 Обслуживается папка: {os.getcwd()}")
-            print(f"🌐 Откройте http://localhost:{PORT} в любом браузере")
-            print(f"⏹️  Нажмите Ctrl+C для остановки сервера")
-            
-            # Try to open browser automatically
-            try:
-                webbrowser.open(f'http://localhost:{PORT}')
-                print(f"✅ Браузер открыт автоматически")
-            except:
-                print(f"⚠️  Откройте браузер вручную")
-            
-            httpd.serve_forever()
-            
+        print(f"🚀 Flask сервер запущен на http://{HOST}:{PORT}")
+        print(f"📂 Приложение: Тренажер фразеологизмов")
+        print(f"🌐 Откройте http://{HOST}:{PORT} в любом браузере")
+        print(f"⏹️  Нажмите Ctrl+C для остановки сервера")
+        
+        # Try to open browser automatically
+        try:
+            webbrowser.open(f'http://{HOST}:{PORT}')
+            print(f"✅ Браузер открыт автоматически")
+        except:
+            print(f"⚠️  Откройте браузер вручную")
+        
+        app.run(host=HOST, port=PORT, debug=True)
+        
     except KeyboardInterrupt:
         print("\n🛑 Сервер остановлен")
     except OSError as e:

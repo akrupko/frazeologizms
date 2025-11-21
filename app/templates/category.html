@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category }} - Тренажер фразеологизмов{% endblock %}
+
+{% block description %}Фразеологизмы по категории {{ category }}. Интерактивные тесты и объяснения происхождения.{% endblock %}
+
+{% block content %}
+    <!-- Category-specific content will be loaded here -->
+    <div id="quiz-container"></div>
+{% endblock %}

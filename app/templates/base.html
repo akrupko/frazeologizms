@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
+    <title>{% block title %}Тренажер фразеологизмов русского языка - изучение онлайн{% endblock %}</title>
+    <meta name="description" content="{% block description %}Интерактивный тренажер для изучения всех фразеологизмов русского языка. Подготовка к ЕГЭ и ОГЭ по русскому языку. Онлайн тесты с объяснениями значений и происхождения.{% endblock %}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation will be loaded here -->
+    <div id="navigation-container"></div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="container">
+            <!-- Header will be loaded here -->
+            <div id="header-container"></div>
+
+            <!-- Page-specific content -->
+            {% block content %}{% endblock %}
+
+            <!-- Footer will be loaded here -->
+            <div id="footer-container"></div>
+
+            <!-- SEO Content will be loaded here -->
+            <div id="seo-container"></div>
+        </div>
+    </div>
+
+    <!-- Load component loader first, then other scripts -->
+    <script src="{{ url_for('static', filename='component-loader.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='navigation.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
