@@ -1,10 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}{{ category }} - Тренажер фразеологизмов{% endblock %}
+{% block title %}{{ category.seo.title if category and category.seo else category.display_name ~ ' - Тренажер фразеологизмов' }}{% endblock %}
 
-{% block description %}Фразеологизмы по категории {{ category }}. Интерактивные тесты и объяснения происхождения.{% endblock %}
+{% block description %}{{ category.seo.description if category and category.seo else 'Фразеологизмы по категории ' ~ category.display_name ~ '. Интерактивные тесты и объяснения происхождения.' }}{% endblock %}
 
 {% block content %}
-    <!-- Category-specific content will be loaded here -->
-    <div id="quiz-container"></div>
+    <section class="category-hero">
+        <div class="category-icon">{{ category.icon }}</div>
+        <div class="category-meta">
+            <h2>{{ category.display_name }}</h2>
+            <p>{{ category.header.description if category.header and category.header.description else category.seo.description }}</p>
+            {% if category.count %}
+            <p class="category-count">В базе: <strong>{{ category.count }}</strong> фразеологизмов</p>
+            {% endif %}
+        </div>
+    </section>
+
+    {% include 'partials/quiz-content.html' %}
 {% endblock %}

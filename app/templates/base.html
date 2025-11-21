@@ -7,34 +7,131 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="format-detection" content="telephone=no">
-    <title>{% block title %}Тренажер фразеологизмов русского языка - изучение онлайн{% endblock %}</title>
-    <meta name="description" content="{% block description %}Интерактивный тренажер для изучения всех фразеологизмов русского языка. Подготовка к ЕГЭ и ОГЭ по русскому языку. Онлайн тесты с объяснениями значений и происхождения.{% endblock %}">
+    <title>{% block title %}{{ category.seo.title if category and category.seo and category.seo.title else 'Тренажер фразеологизмов русского языка - изучение онлайн' }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ category.seo.description if category and category.seo and category.seo.description else 'Интерактивный тренажер для изучения всех фразеологизмов русского языка. Подготовка к ЕГЭ и ОГЭ по русскому языку. Онлайн тесты с объяснениями значений и происхождения.' }}{% endblock %}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navigation will be loaded here -->
-    <div id="navigation-container"></div>
+    <!-- Header Ad Placeholder -->
+    <div class="ad-placeholder ad-header" data-ad-slot="header">
+        <!-- Ad: Header Banner (Leaderboard 728x90 or 970x90) -->
+        <span class="ad-label">Реклама</span>
+    </div>
+
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>📚 Темы фразеологизмов</h3>
+            <button class="sidebar-close" id="sidebar-close">&times;</button>
+        </div>
+        <div class="sidebar-content">
+            {% if categories %}
+                {% for cat in categories %}
+                <a href="{{ cat.url }}" class="nav-link{% if category and category.slug == cat.slug %} active{% endif %}"
+                   data-category="{{ cat.slug }}"
+                   title="{{ cat.title }}">
+                    {{ cat.icon }} {{ cat.display_name }}
+                    {% if cat.count %}<span class="category-count">({{ cat.count }})</span>{% endif %}
+                </a>
+                {% endfor %}
+            {% endif %}
+            <div class="sidebar-footer">
+                <small>🎓 Подготовка к ЕГЭ и ОГЭ</small>
+            </div>
+
+            <!-- Sidebar Ad Placeholder -->
+            <div class="ad-placeholder ad-sidebar" data-ad-slot="sidebar">
+                <!-- Ad: Sidebar (Medium Rectangle 300x250) -->
+                <span class="ad-label">Реклама</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
     
     <!-- Main Content -->
     <div class="main-content" id="main-content">
         <div class="container">
-            <!-- Header will be loaded here -->
-            <div id="header-container"></div>
+            <!-- Header -->
+            <header>
+                <h1 id="page-title">{{ category.header.title if category and category.header and category.header.title else '🏠 Тренажер фразеологизмов' }}</h1>
+                <p id="page-description">{{ category.header.description if category and category.header and category.header.description else 'Изучение всех фразеологизмов русского языка по разным темам' }}</p>
+            </header>
+
+            <!-- Search Widget -->
+            <div class="search-widget">
+                <form id="search-form" action="#" method="get" onsubmit="return false;">
+                    <div class="search-input-wrapper">
+                        <input type="search" 
+                               id="search-input" 
+                               name="q" 
+                               placeholder="Поиск фразеологизма..." 
+                               autocomplete="off"
+                               minlength="2">
+                        <button type="submit" class="search-button" aria-label="Поиск">
+                            🔍
+                        </button>
+                    </div>
+                    <div id="search-results" class="search-results" style="display: none;"></div>
+                </form>
+            </div>
 
             <!-- Page-specific content -->
             {% block content %}{% endblock %}
 
-            <!-- Footer will be loaded here -->
-            <div id="footer-container"></div>
+            <!-- Content Area Ad Placeholder -->
+            <div class="ad-placeholder ad-content" data-ad-slot="content">
+                <!-- Ad: In-Content (Large Rectangle 336x280 or 300x250) -->
+                <span class="ad-label">Реклама</span>
+            </div>
 
-            <!-- SEO Content will be loaded here -->
-            <div id="seo-container"></div>
+            <!-- Footer -->
+            <footer>
+                <p id="footer-text">{{ category.footer_text if category and category.footer_text else '📚 Тренажер фразеологизмов русского языка' }}</p>
+            </footer>
+
+            <!-- SEO Content Section -->
+            {% if category and category.seo %}
+            <section class="seo-content">
+                <div class="seo-text">
+                    <h2 id="seo-title">{{ category.seo.title }}</h2>
+                    
+                    <p id="seo-description">{{ category.seo.description }}</p>
+                    
+                    <h3 id="seo-features-title">{{ category.seo.features_title }}</h3>
+                    <p id="seo-features-text">{{ category.seo.features_text }}</p>
+                    
+                    <ul class="seo-list">
+                        <li>🎯 Подготовиться к заданиям ЕГЭ и ОГЭ по фразеологии</li>
+                        <li>📖 Изучить происхождение и этимологию фразеологических единиц</li>
+                        <li>💡 Запомнить значения популярных русских идиом</li>
+                        <li>🏆 Успешно выступить на олимпиадах по русскому языку</li>
+                        <li>📝 Улучшить письменную и устную речь</li>
+                    </ul>
+                    
+                    <p class="seo-footer" id="seo-footer">{{ category.seo.footer }}</p>
+                </div>
+            </section>
+            {% endif %}
         </div>
     </div>
 
-    <!-- Load component loader first, then other scripts -->
-    <script src="{{ url_for('static', filename='component-loader.js') }}"></script>
+    <!-- Load scripts -->
+    <script>
+        window.TABLE_PHRASES_URL = "{{ url_for('web.table_phrases_data') }}";
+        // Expose category data for JS trainer
+        {% if category %}
+        window.CURRENT_CATEGORY = "{{ category.key }}";
+        window.CATEGORY_NAME = "{{ category.display_name }}";
+        window.CATEGORY_SLUG = "{{ category.slug }}";
+        {% endif %}
+    </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src="{{ url_for('static', filename='navigation.js') }}"></script>
     {% block extra_js %}{% endblock %}

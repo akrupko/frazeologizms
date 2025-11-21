@@ -23,8 +23,8 @@ def create_app(config_name=None):
     compress.init_app(app)
     
     # Register blueprints
-    from app.routes import main_bp, api_bp
-    app.register_blueprint(main_bp)
+    from app.routes import web_bp, api_bp
+    app.register_blueprint(web_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
     
     # Create database tables (only if database is available)
