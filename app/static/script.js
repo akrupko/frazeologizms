@@ -28,7 +28,9 @@ class PhraseologyTrainer {
                 console.warn('Running from file:// protocol - some browsers may have CORS restrictions');
             }
             
-            const response = await fetch('table_phrases.json');
+            // Use the URL provided by Flask template or fallback to default
+            const phrasesUrl = window.TABLE_PHRASES_URL || 'table_phrases.json';
+            const response = await fetch(phrasesUrl);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.seo.title if category and category.seo else 'Тренажер фразеологизмов русского языка - изучение онлайн' }}{% endblock %}
+
+{% block description %}{{ category.seo.description if category and category.seo else 'Интерактивный тренажер для изучения всех фразеологизмов русского языка. Подготовка к ЕГЭ и ОГЭ по русскому языку. Онлайн тесты с объяснениями значений и происхождения.' }}{% endblock %}
+
+{% block content %}
+    <!-- Quiz content container -->
+    {% include 'partials/quiz-content.html' %}
+{% endblock %}
