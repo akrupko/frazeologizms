@@ -46,6 +46,18 @@ class PhraseologicalEntry(db.Model):
     @classmethod
     def search(cls, query_text, limit=20):
         """Search for entries by phrase or meaning."""
+        from sqlalchemy import or_
         return cls.query.filter(
-            cls.phrase.ilike(f'%{query_text}%')
+            or_(
+                cls.phrase.ilike(f'%{query_text}%'),
+                db.cast(cls.meanings, db.Text).ilike(f'%{query_text}%'),
+                cls.etymology.ilike(f'%{query_text}%')
+            )
+        ).order_by(
+            # Exact phrase match first
+            cls.phrase.ilike(f'%{query_text}%').desc(),
+            # Then by phrase length (shorter phrases first)
+            db.func.length(cls.phrase).asc(),
+            # Then alphabetically
+            cls.phrase.asc()
         ).limit(limit).all()

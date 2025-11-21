@@ -66,7 +66,7 @@
 
             <!-- Search Widget -->
             <div class="search-widget">
-                <form id="search-form" action="#" method="get" onsubmit="return false;">
+                <form id="search-form" action="{{ url_for('web.search') }}" method="get">
                     <div class="search-input-wrapper">
                         <input type="search" 
                                id="search-input" 
@@ -80,6 +80,11 @@
                     </div>
                     <div id="search-results" class="search-results" style="display: none;"></div>
                 </form>
+                <div class="search-alternatives">
+                    <a href="{{ url_for('web.search_text') }}" class="text-search-link">
+                        📝 Поиск в тексте
+                    </a>
+                </div>
             </div>
 
             <!-- Page-specific content -->

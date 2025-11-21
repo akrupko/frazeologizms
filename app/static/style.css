@@ -2096,3 +2096,26 @@ footer {
         font-size: 1.4rem;
     }
 }
+
+.search-alternatives {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.text-search-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.text-search-link:hover {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    text-decoration: none;
+}
