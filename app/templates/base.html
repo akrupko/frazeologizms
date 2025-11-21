@@ -129,7 +129,7 @@
 
     <!-- Load scripts -->
     <script>
-        window.TABLE_PHRASES_URL = "{{ url_for('web.table_phrases_data') }}";
+        window.API_BASE_URL = "{{ url_for('api.get_phrases') }}".replace('/phrases', '');
         // Expose category data for JS trainer
         {% if category %}
         window.CURRENT_CATEGORY = "{{ category.key }}";
