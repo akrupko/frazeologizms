@@ -1,0 +1,13 @@
+# SEO metadata overrides for specific pages
+# This file allows customizing SEO metadata without changing code
+
+pages:
+  home:
+    title: "Тренажер фразеологизмов русского языка - изучение онлайн"
+    description: "Интерактивный тренажер для изучения фразеологизмов русского языка. Подготовка к ЕГЭ и ОГЭ. Онлайн тесты с объяснениями значений и происхождения."
+  
+  # Category-specific overrides (optional, falls back to category_config.yaml)
+  categories: {}
+  
+  # Phrase-specific overrides (optional, falls back to auto-generated)
+  phrases: {}

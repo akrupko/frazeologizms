@@ -1,0 +1,33 @@
+{% if seo_meta %}
+<!-- Basic Meta Tags -->
+<title>{{ seo_meta.title }}</title>
+<meta name="description" content="{{ seo_meta.description }}">
+<link rel="canonical" href="{{ seo_meta.canonical }}">
+
+{% if seo_meta.robots %}
+<meta name="robots" content="{{ seo_meta.robots }}">
+{% endif %}
+
+<!-- Open Graph Meta Tags -->
+{% if seo_meta.og %}
+<meta property="og:title" content="{{ seo_meta.og.title }}">
+<meta property="og:description" content="{{ seo_meta.og.description }}">
+<meta property="og:url" content="{{ seo_meta.og.url }}">
+<meta property="og:type" content="{{ seo_meta.og.type }}">
+{% if seo_meta.og.image %}
+<meta property="og:image" content="{{ seo_meta.og.image }}">
+{% endif %}
+<meta property="og:site_name" content="Тренажер фразеологизмов">
+<meta property="og:locale" content="ru_RU">
+{% endif %}
+
+<!-- Twitter Card Meta Tags -->
+{% if seo_meta.twitter %}
+<meta name="twitter:card" content="{{ seo_meta.twitter.card }}">
+<meta name="twitter:title" content="{{ seo_meta.twitter.title }}">
+<meta name="twitter:description" content="{{ seo_meta.twitter.description }}">
+{% if seo_meta.twitter.image %}
+<meta name="twitter:image" content="{{ seo_meta.twitter.image }}">
+{% endif %}
+{% endif %}
+{% endif %}

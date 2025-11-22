@@ -7,8 +7,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="format-detection" content="telephone=no">
-    <title>{% block title %}{{ category.seo.title if category and category.seo and category.seo.title else 'Тренажер фразеологизмов русского языка - изучение онлайн' }}{% endblock %}</title>
-    <meta name="description" content="{% block description %}{{ category.seo.description if category and category.seo and category.seo.description else 'Интерактивный тренажер для изучения всех фразеологизмов русского языка. Подготовка к ЕГЭ и ОГЭ по русскому языку. Онлайн тесты с объяснениями значений и происхождения.' }}{% endblock %}">
+    
+    <!-- SEO Meta Tags -->
+    {% include 'partials/meta-tags.html' %}
+    
+    <!-- Structured Data -->
+    {% include 'partials/structured-data.html' %}
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
