@@ -27,6 +27,16 @@ def create_app(config_name=None):
     app.register_blueprint(web_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
     
+    # Add static file caching headers
+    @app.after_request
+    def add_cache_headers(response):
+        """Add cache headers for static assets."""
+        if request.path.startswith('/static/'):
+            # Far-future cache headers for static assets (1 year)
+            response.cache_control.max_age = 31536000
+            response.cache_control.public = True
+        return response
+    
     # Create database tables (only if database is available)
     with app.app_context():
         try:

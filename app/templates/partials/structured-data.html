@@ -1,0 +1,14 @@
+{% if structured_data %}
+<!-- Structured Data (JSON-LD) -->
+{% if structured_data is iterable and structured_data is not mapping %}
+    {% for schema in structured_data %}
+<script type="application/ld+json">
+{{ schema | tojson | safe }}
+</script>
+    {% endfor %}
+{% else %}
+<script type="application/ld+json">
+{{ structured_data | tojson | safe }}
+</script>
+{% endif %}
+{% endif %}

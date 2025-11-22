@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}{% if query %}Результаты поиска: "{{ query }}"{% else %}Поиск фразеологизмов{% endif %} | Тренажер фразеологизмов{% endblock %}
-
-{% block description %}{% if query %}Результаты поиска по запросу "{{ query }}". Найдено фразеологизмов: {{ pagination.total if pagination else 0 }}.{% else %}Поиск фразеологизмов русского языка по значению, происхождению и тексту.{% endif %} {% endblock %}
-
 {% block content %}
 <!-- Breadcrumbs -->
 <nav class="breadcrumbs">

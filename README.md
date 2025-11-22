@@ -497,6 +497,337 @@ Static files are automatically served at `/static/` by Flask.
 - **Responsive Design**: Mobile-friendly interface
 - **Component System**: Modular loading of reusable components
 
+## SEO and Performance
+
+The application includes a comprehensive SEO automation suite for optimal search engine visibility and performance.
+
+### SEO Features
+
+#### 1. Metadata Management
+
+All pages automatically generate optimized meta tags:
+
+- **Title tags**: Unique, keyword-optimized titles for each page
+- **Meta descriptions**: Compelling descriptions with call-to-action
+- **Canonical URLs**: Prevent duplicate content issues
+- **Open Graph tags**: Enhanced social media sharing (Facebook, LinkedIn)
+- **Twitter Cards**: Rich previews for Twitter shares
+
+Pages with SEO metadata:
+- Home page
+- All category pages
+- All phrase detail pages
+- Search pages (noindex)
+
+#### 2. Structured Data (JSON-LD)
+
+Every page includes appropriate Schema.org structured data for rich search results:
+
+**Home Page:**
+```json
+{
+  "@type": "WebSite",
+  "potentialAction": {
+    "@type": "SearchAction"
+  }
+}
+```
+
+**Category Pages:**
+```json
+{
+  "@type": "CollectionPage",
+  "numberOfItems": 150
+}
+```
+
+**Phrase Detail Pages:**
+```json
+[
+  {
+    "@type": "Article",
+    "headline": "бить баклуши",
+    "datePublished": "...",
+    "dateModified": "..."
+  },
+  {
+    "@type": "DefinedTerm",
+    "name": "бить баклуши",
+    "description": "значение фразеологизма"
+  }
+]
+```
+
+#### 3. Sitemap and Robots
+
+The application dynamically generates SEO-essential files:
+
+**Sitemap (`/sitemap.xml`):**
+- Lists all pages: home, categories, and phrase details
+- Includes `lastmod` timestamps from the database
+- Cached for 1 hour (refreshes when new data is added)
+- Proper priority and changefreq settings
+
+**Robots.txt (`/robots.txt`):**
+```
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /search?
+Disallow: /search/text
+
+Sitemap: https://frazeologizm.ru/sitemap.xml
+```
+
+#### 4. Custom SEO Metadata
+
+Override default metadata by editing `app/seo_metadata.yaml`:
+
+```yaml
+pages:
+  home:
+    title: "Custom home page title"
+    description: "Custom description"
+  
+  categories:
+    my-category-slug:
+      title: "Custom category title"
+      description: "Custom description"
+  
+  phrases:
+    my-phrase-slug:
+      title: "Custom phrase title"
+      description: "Custom description"
+```
+
+### Performance Optimizations
+
+#### 1. Compression
+
+Flask-Compress automatically gzip-compresses all responses over 500 bytes:
+- HTML pages
+- JSON API responses
+- CSS and JavaScript files
+
+#### 2. Caching
+
+**Browser Caching:**
+- Static assets (CSS, JS, images): 1 year (31536000 seconds)
+- API responses: 3-60 minutes depending on endpoint
+- Page metadata: Cached in Redis/memory
+
+**Server-Side Caching:**
+- Category data: 1 hour
+- Navigation: 10 minutes
+- Sitemap: 1 hour
+- API responses: 3-60 minutes
+
+#### 3. CDN and Timeweb Configuration
+
+To enable CDN caching on Timeweb:
+
+1. **Enable caching for static assets:**
+   - Configure Timeweb CDN to cache `/static/*` paths
+   - Set cache TTL to 1 year for static files
+
+2. **HTML page caching:**
+   - Cache home page for 1 hour
+   - Cache category pages for 1 hour
+   - Cache phrase pages for 1 day
+   - Bypass cache for search and API endpoints
+
+3. **Cache invalidation:**
+   - Configure cache purge when content is updated
+   - Use versioned static file names if needed
+
+**Example Timeweb cache rules:**
+```
+# Static assets - cache for 1 year
+/static/* -> Cache-Control: public, max-age=31536000
+
+# Pages - cache with shorter TTL
+/ -> Cache-Control: public, max-age=3600
+/kategoria/* -> Cache-Control: public, max-age=3600
+/frazeologizm/* -> Cache-Control: public, max-age=86400
+
+# API - short cache
+/api/* -> Cache-Control: public, max-age=300
+
+# Dynamic/user-specific - no cache
+/search* -> Cache-Control: no-cache
+```
+
+### Image Automation
+
+The application automatically serves images for phrase detail pages:
+
+#### Adding Images
+
+1. **Create an image** for a phrase (recommended: WebP format)
+2. **Name the file** using the phrase slug: `bit-baklushi.webp`
+3. **Upload to** `app/static/images/`
+
+**Example:**
+```bash
+# For phrase "бить баклуши" (slug: bit-baklushi)
+app/static/images/bit-baklushi.webp
+
+# Alternative formats (checked in order)
+app/static/images/bit-baklushi.jpg
+app/static/images/bit-baklushi.jpeg
+app/static/images/bit-baklushi.png
+```
+
+The image will automatically:
+- Display on the phrase detail page
+- Be included in Open Graph meta tags
+- Be referenced in JSON-LD structured data
+- Have a fallback illustration if missing
+
+#### Image Optimization Tips
+
+1. **Use WebP format** for best compression (60-80% smaller than JPEG)
+2. **Recommended size**: 800x600px or 600x600px
+3. **Optimize before upload**:
+   ```bash
+   # Convert to WebP
+   cwebp -q 80 input.jpg -o output.webp
+   
+   # Resize if needed
+   convert input.jpg -resize 800x600 output.jpg
+   ```
+4. **Alt text**: Automatically set to the phrase text
+
+### Advertising Integration
+
+The application includes placeholder divs for ad integration:
+
+#### Ad Slots
+
+**1. Header Banner (Top of page)**
+```html
+<div class="ad-placeholder ad-header" data-ad-slot="header">
+  <!-- Insert your ad code here -->
+</div>
+```
+Recommended size: Leaderboard (728x90) or Large Leaderboard (970x90)
+
+**2. Sidebar (Category menu)**
+```html
+<div class="ad-placeholder ad-sidebar" data-ad-slot="sidebar">
+  <!-- Insert your ad code here -->
+</div>
+```
+Recommended size: Medium Rectangle (300x250)
+
+**3. In-Content (After main content)**
+```html
+<div class="ad-placeholder ad-content" data-ad-slot="content">
+  <!-- Insert your ad code here -->
+</div>
+```
+Recommended size: Large Rectangle (336x280) or Medium Rectangle (300x250)
+
+#### Adding Ad Scripts
+
+**Option 1: Direct injection (templates)**
+
+Edit `app/templates/base.html` and replace placeholder divs:
+
+```html
+<div class="ad-placeholder ad-header" data-ad-slot="header">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <ins class="adsbygoogle"
+       style="display:inline-block;width:728px;height:90px"
+       data-ad-client="ca-pub-XXXXXXXXXX"
+       data-ad-slot="XXXXXXXXXX"></ins>
+  <script>
+       (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+```
+
+**Option 2: JavaScript injection (external script)**
+
+Add ad script to `app/static/ads.js` and include in base template:
+
+```javascript
+// app/static/ads.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Header ad
+  const headerAd = document.querySelector('.ad-header');
+  if (headerAd) {
+    headerAd.innerHTML = '<!-- Your ad code -->';
+  }
+  
+  // Sidebar ad
+  const sidebarAd = document.querySelector('.ad-sidebar');
+  if (sidebarAd) {
+    sidebarAd.innerHTML = '<!-- Your ad code -->';
+  }
+});
+```
+
+Then in `base.html`:
+```html
+<script src="{{ url_for('static', filename='ads.js') }}"></script>
+```
+
+**Option 3: Ad network tags (Google AdSense)**
+
+If using Google AdSense auto ads, simply add the AdSense script to `<head>` in `base.html`:
+
+```html
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+        data-ad-client="ca-pub-XXXXXXXXXX"></script>
+```
+
+### Validating SEO Implementation
+
+#### 1. Test Meta Tags
+```bash
+curl -I https://frazeologizm.ru/
+curl https://frazeologizm.ru/ | grep -E '<meta|<title|<link rel="canonical'
+```
+
+#### 2. Test Structured Data
+- Use [Google Rich Results Test](https://search.google.com/test/rich-results)
+- Paste any page URL to validate JSON-LD schemas
+
+#### 3. Test Sitemap
+```bash
+curl https://frazeologizm.ru/sitemap.xml
+```
+Verify it lists all pages with proper lastmod dates.
+
+#### 4. Test Robots.txt
+```bash
+curl https://frazeologizm.ru/robots.txt
+```
+
+#### 5. Performance Testing
+```bash
+# Test compression
+curl -H "Accept-Encoding: gzip" -I https://frazeologizm.ru/
+
+# Test cache headers
+curl -I https://frazeologizm.ru/static/style.css
+```
+
+### SEO Configuration
+
+Set the base site URL in your `.env` file:
+
+```env
+SITE_URL=https://frazeologizm.ru
+```
+
+This URL is used for:
+- Canonical URLs
+- Open Graph URLs
+- Sitemap absolute URLs
+- Structured data URLs
+
 ## Development
 
 ### Adding New Routes

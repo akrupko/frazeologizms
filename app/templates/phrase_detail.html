@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block title %}{{ phrase.phrase }} - {{ phrase.category or 'Фразеологизм' }} | Тренажер фразеологизмов{% endblock %}
-
-{% block description %}{{ phrase.phrase }}: {{ phrase.meanings[0] if phrase.meanings and phrase.meanings|length > 0 else 'Значение и происхождение фразеологизма' }}. Изучение русских идиом и фразеологических выражений.{% endblock %}
-
 {% block content %}
 <!-- Breadcrumbs -->
 <nav class="breadcrumbs">
